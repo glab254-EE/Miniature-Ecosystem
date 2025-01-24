@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using DG.Tweening.Plugins.Options;
+using Unity.Mathematics;
 
 public class AnimalBehaivor : MonoBehaviour
 {
@@ -13,19 +14,24 @@ public class AnimalBehaivor : MonoBehaviour
     [SerializeField] private Vector2 MovementBounds;
     [Header("Settings")]
     [SerializeField] private BeingType animalType = BeingType.Animal_Herbinoves;
+    [SerializeField] private bool keepVertical = false;
     [SerializeField] private float speed = 1;
+    [SerializeField] private float TurnDuration = 0.5f;
     [SerializeField] private float movementDelay = 2;
     [SerializeField] private float hungerRate = 0.5f/60; // rate or ammount of hunger given per tick/delta time
     [SerializeField] private float maxHunger = 100;
+    [SerializeField] private float hungerDamage = 100;
+    [SerializeField] private float hungerReducePerBite = 50;
     [SerializeField] private float _hunger; // serialize for testing.
     private Vector2 _minMovementBounds;
     private Vector2 _maxMovementBounds;
     private bool _moving;
     internal bool _dead;
-   [SerializeField] int _currentPhase; // -1: dead, 0: standing / movement finished, 1:  movement, 2: hunting/fleeing.
+   int _currentPhase; // -1: dead, 0: standing / movement finished, 1:  movement, 2: hunting/fleeing.
 
     float _phaseTick;
     private Vector2 GetRandomPosVector(Vector2 min, Vector2 max){
+        
         Vector2 output = min;
         try{
             output = new Vector2(UnityEngine.Random.Range(min.x,max.x),UnityEngine.Random.Range(min.y,max.y)); // gets random vector
@@ -40,7 +46,7 @@ public class AnimalBehaivor : MonoBehaviour
         foreach(AnimalBehaivor animal in FindObjectsOfType<AnimalBehaivor>()){
             if ((animalType == BeingType.Animal_Predators&&animal.animalType != BeingType.Plant)||(animalType == BeingType.Animal_Herbinoves&&animal.animalType == BeingType.Plant)){
                 float distance = (transform.position-animal.transform.position).magnitude;
-                if (closestdistance == -1||(distance < closestdistance)){
+                if ((closestdistance == -1||(distance < closestdistance)) && animal.gameObject != this.gameObject){
                     closestdistance = distance;
                     output = animal.transform;
                 }
@@ -65,6 +71,34 @@ public class AnimalBehaivor : MonoBehaviour
         transform.position = GetRandomPosVector(_minMovementBounds,_maxMovementBounds);
         _currentPhase = 0;
     }
+    private void RotateToTarget(Vector2 target){
+        Vector2 vectorToTarget = target - (Vector2)transform.position;
+        if (!keepVertical){
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.DORotateQuaternion(q,TurnDuration).Play();
+        } else if (keepVertical && spriteRenderer != null){
+            if (vectorToTarget.x >= 0){
+                spriteRenderer.flipX = false;
+            } else {
+                spriteRenderer.flipX = true;
+            }
+        }
+    }
+    private void RotateToTarget(Transform target){
+        Vector3 vectorToTarget = target.transform.position - transform.position;
+        if (!keepVertical){
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.DORotateQuaternion(q,TurnDuration).Play();
+        } else if (keepVertical && spriteRenderer != null){
+            if (vectorToTarget.x >= 0){
+                spriteRenderer.flipX = false;
+            } else {
+                spriteRenderer.flipX = true;
+            }
+        }
+    }
     private IEnumerator RandomMovement(){
         _moving = true;
         Vector2 targetpos = GetRandomPosVector(_minMovementBounds,_maxMovementBounds);
@@ -72,6 +106,7 @@ public class AnimalBehaivor : MonoBehaviour
         if (targetpos != null){
             float desiredtime = Vector2.Distance((Vector2)transform.position,targetpos)/speed;
             currenttween = rb.DOMove(targetpos,desiredtime);
+            RotateToTarget(targetpos);
             currenttween.Play();
             yield return currenttween.WaitForCompletion();
             _currentPhase = 0;
@@ -82,17 +117,20 @@ public class AnimalBehaivor : MonoBehaviour
         _moving = true;
         Tween currenttween = null;
         Vector3 oldpos = Vector3.zero;
-        while (_moving){
+        while (_moving && _currentPhase == 2){
             Transform targetpos = FindClosestHuntable(); // finds huntable being
-            if (currenttween != null && currenttween.IsComplete()){
-                _moving = false;
-            } else if (targetpos != null && (oldpos == Vector3.zero || oldpos != targetpos.position)){
+            if (currenttween != null){
+                currenttween.Kill();
+            }
+           if (targetpos != null && (oldpos == Vector3.zero || oldpos != targetpos.position)){
                 oldpos = targetpos.position;
+                Vector2 convertedtargetpos = oldpos;
                 float desiredtime = Vector2.Distance((Vector2)transform.position,targetpos.position)/speed;
-                currenttween = rb.DOMove(targetpos.position,desiredtime);
+                RotateToTarget(targetpos);
+                currenttween = rb.DOMove((Vector2)oldpos,desiredtime);
                 currenttween.Play(); // runs towards it
             }
-            yield return new WaitForSeconds(0.1f); // to not crash it...
+            yield return new WaitForSeconds(0.15f); // to not crash it...
         }
         _currentPhase = 0;
     }
@@ -132,6 +170,21 @@ public class AnimalBehaivor : MonoBehaviour
         }
         if (_hunger<=0&&_currentPhase != -1){ // death by hunger
             _currentPhase = -1;
+        }
+    }
+    void OnCollisionEnter2D(Collision2D col)
+    {        
+        if (col.gameObject.TryGetComponent<AnimalBehaivor>(out AnimalBehaivor behaivor) && _currentPhase == 2){
+            if ((animalType == BeingType.Animal_Predators && behaivor.animalType == BeingType.Animal_Herbinoves)||(animalType == BeingType.Animal_Herbinoves && behaivor.animalType == BeingType.Plant)){
+                behaivor._hunger -= hungerDamage;
+                if (behaivor._hunger - hungerReducePerBite <= 0){
+                    _hunger += behaivor._hunger;
+                } else {
+                _hunger += hungerReducePerBite;
+                }
+                _currentPhase = 0;
+                _phaseTick = 0;
+            }
         }
     }
 }

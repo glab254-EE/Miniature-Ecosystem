@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 100620315}
   - component: {fileID: 100620314}
   - component: {fileID: 100620313}
+  - component: {fileID: 100620317}
   m_Layer: 0
   m_Name: Base-Animal (1)
   m_TagString: Untagged
@@ -149,14 +150,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100620312}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_Mass: 2
+  m_LinearDrag: 0.5
+  m_AngularDrag: 0.5
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -185,10 +186,14 @@ MonoBehaviour:
   spriteRenderer: {fileID: 100620315}
   MovementBounds: {x: 6, y: 3.5}
   animalType: 2
+  keepVertical: 0
   speed: 1.5
+  TurnDuration: 0.5
   movementDelay: 1.5
-  hungerRate: 0.15
+  hungerRate: 15
   maxHunger: 100
+  hungerDamage: 100
+  hungerReducePerBite: 50
   _hunger: 0
 --- !u!212 &100620315
 SpriteRenderer:
@@ -231,7 +236,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -251,13 +256,48 @@ Transform:
   m_GameObject: {fileID: 100620312}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.76, y: 0.81, z: 0}
+  m_LocalPosition: {x: 4.41, y: 0.88, z: 9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2058207752}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &100620317
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100620312}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.65
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,10 +506,14 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7696507311629725699}
   MovementBounds: {x: 6, y: 3.5}
   animalType: 1
+  keepVertical: 0
   speed: 1
+  TurnDuration: 0.5
   movementDelay: 2
   hungerRate: 0.09
   maxHunger: 100
+  hungerDamage: 100
+  hungerReducePerBite: 50
   _hunger: 0
 --- !u!4 &4282647572620055815
 Transform:
@@ -499,6 +543,7 @@ GameObject:
   - component: {fileID: 7696507311629725699}
   - component: {fileID: 484548611531970167}
   - component: {fileID: 6231090495110093204}
+  - component: {fileID: 7696507311629725700}
   m_Layer: 0
   m_Name: Base-Animal
   m_TagString: Untagged
@@ -514,14 +559,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5464182825794521193}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_Mass: 2
+  m_LinearDrag: 0.5
+  m_AngularDrag: 0.5
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -602,6 +647,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &7696507311629725700
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5464182825794521193}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!212 &8951596062077899658
 SpriteRenderer:
   m_ObjectHideFlags: 0
