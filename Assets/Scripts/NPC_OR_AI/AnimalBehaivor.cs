@@ -18,16 +18,11 @@ public class AnimalBehaivor : MonoBehaviour
     [SerializeField] private float speed = 1;
     [SerializeField] private float TurnDuration = 0.5f;
     [SerializeField] private float movementDelay = 2;
-    [SerializeField] private float hungerRate = 0.5f/60; // rate or ammount of hunger given per tick/delta time
-    [SerializeField] private float maxHunger = 100;
-    [SerializeField] private float hungerDamage = 100;
-    [SerializeField] private float hungerReducePerBite = 50;
-    [SerializeField] private float _hunger; // serialize for testing.
+    [SerializeField] private Public_Data ReferencedData;
     private Vector2 _minMovementBounds;
     private Vector2 _maxMovementBounds;
     private bool _moving;
-    internal bool _dead;
-   int _currentPhase; // -1: dead, 0: standing / movement finished, 1:  movement, 2: hunting/fleeing.
+   int _currentPhase; // -1: dead, 0: standing / movement finished, 1:  movement
 
     float _phaseTick;
     private Vector2 GetRandomPosVector(Vector2 min, Vector2 max){
@@ -59,7 +54,6 @@ public class AnimalBehaivor : MonoBehaviour
         _minMovementBounds = -MovementBounds;
         _maxMovementBounds = MovementBounds;
         _moving = false;
-        _dead = false;  
         _phaseTick = 0; 
         if (spriteRenderer == null){
             gameObject.TryGetComponent<SpriteRenderer>(out spriteRenderer);
@@ -67,7 +61,6 @@ public class AnimalBehaivor : MonoBehaviour
         if (rb==null){
             gameObject.TryGetComponent<Rigidbody2D>(out rb);
         }  
-        _hunger = maxHunger;
         transform.position = GetRandomPosVector(_minMovementBounds,_maxMovementBounds);
         _currentPhase = 0;
     }
@@ -136,24 +129,11 @@ public class AnimalBehaivor : MonoBehaviour
     }
     void Update()
     {
-        if (_currentPhase == -1 || _dead){
-            if (!_dead){
-                _dead = true;
-                _phaseTick = 0;
-            }
-            _phaseTick+=Time.deltaTime;
-            if (_phaseTick>=5){
-                spriteRenderer.DOColor(new Color(255,255,255,0),5).Play(); // fades out in 5 secs, destroying it.
-                _currentPhase = -1;
-                Destroy(gameObject,5);
-            }
-        } else if (animalType != BeingType.Plant && !_dead){ // checks if being is NOT plant.
-            float newHunger = Mathf.Clamp(_hunger-Time.deltaTime*hungerRate,0,120);
-            _hunger=newHunger;
+       if (animalType != BeingType.Plant ){ // checks if being is NOT plant.
             if (_currentPhase == 0 && movementDelay >= 0){
                 if (_phaseTick >= movementDelay){
                     _phaseTick = 0;
-                    _currentPhase = _hunger > 50 ? 1 : 2;
+                    _currentPhase = 1;
                 } else {
                     _phaseTick+= Time.deltaTime;
                 }
@@ -163,28 +143,6 @@ public class AnimalBehaivor : MonoBehaviour
                 StartCoroutine(Hunt());
             }
         } else { // plant based animal.
-            if (!_dead){
-            float newHunger = Mathf.Clamp(_hunger+Time.deltaTime*hungerRate,0,120);
-            _hunger=newHunger;
-            }
-        }
-        if (_hunger<=0&&_currentPhase != -1){ // death by hunger
-            _currentPhase = -1;
-        }
-    }
-    void OnCollisionEnter2D(Collision2D col)
-    {        
-        if (col.gameObject.TryGetComponent<AnimalBehaivor>(out AnimalBehaivor behaivor) && _currentPhase == 2){
-            if ((animalType == BeingType.Animal_Predators && behaivor.animalType == BeingType.Animal_Herbinoves)||(animalType == BeingType.Animal_Herbinoves && behaivor.animalType == BeingType.Plant)){
-                behaivor._hunger -= hungerDamage;
-                if (behaivor._hunger - hungerReducePerBite <= 0){
-                    _hunger += behaivor._hunger;
-                } else {
-                _hunger += hungerReducePerBite;
-                }
-                _currentPhase = 0;
-                _phaseTick = 0;
-            }
         }
     }
 }

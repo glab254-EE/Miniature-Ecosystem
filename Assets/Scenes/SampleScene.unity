@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 100620314}
   - component: {fileID: 100620313}
   - component: {fileID: 100620317}
+  - component: {fileID: 100620318}
   m_Layer: 0
   m_Name: Base-Animal (1)
   m_TagString: Untagged
@@ -190,11 +191,7 @@ MonoBehaviour:
   speed: 1.5
   TurnDuration: 0.5
   movementDelay: 1.5
-  hungerRate: 15
-  maxHunger: 100
-  hungerDamage: 100
-  hungerReducePerBite: 50
-  _hunger: 0
+  ReferencedData: {fileID: 0}
 --- !u!212 &100620315
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -298,6 +295,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.65
+--- !u!114 &100620318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100620312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 291c84411e563a34b85c505fe8336069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneyStorage: {fileID: 1137821221}
+  resourceGain: 1
+  resourceType: 0
+  cooldown: 0.5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,6 +398,51 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1137821220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1137821222}
+  - component: {fileID: 1137821221}
+  m_Layer: 2
+  m_Name: -- GAME DATA --
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1137821221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1137821220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 128ad7d51d46e6f4baaf8c473eab3373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveFileName: Miniature Ecosystem
+--- !u!4 &1137821222
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1137821220}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -510,11 +568,7 @@ MonoBehaviour:
   speed: 1
   TurnDuration: 0.5
   movementDelay: 2
-  hungerRate: 0.09
-  maxHunger: 100
-  hungerDamage: 100
-  hungerReducePerBite: 50
-  _hunger: 0
+  ReferencedData: {fileID: 0}
 --- !u!4 &4282647572620055815
 Transform:
   m_ObjectHideFlags: 0
@@ -544,6 +598,7 @@ GameObject:
   - component: {fileID: 484548611531970167}
   - component: {fileID: 6231090495110093204}
   - component: {fileID: 7696507311629725700}
+  - component: {fileID: 7696507311629725701}
   m_Layer: 0
   m_Name: Base-Animal
   m_TagString: Untagged
@@ -682,6 +737,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &7696507311629725701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5464182825794521193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 291c84411e563a34b85c505fe8336069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneyStorage: {fileID: 1137821221}
+  resourceGain: 1.5
+  resourceType: 1
+  cooldown: 1
 --- !u!212 &8951596062077899658
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -741,3 +812,4 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 4282647572620055815}
   - {fileID: 100620316}
+  - {fileID: 1137821222}
