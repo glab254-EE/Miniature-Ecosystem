@@ -17,6 +17,7 @@ public class ResourceGainer : MonoBehaviour
             Debug.LogWarning("Error, no Public_Data connected to gameobject.");
             if (moneyStorage == null) Destroy ( gameObject);
         }
+        moneyStorage.ChangeGain(resourceType,resourceGain/cooldown);
     }
 
     void Update()
@@ -24,7 +25,10 @@ public class ResourceGainer : MonoBehaviour
         cd -= Time.deltaTime;
         if (cd <= 0){
             cd = cooldown;
-            moneyStorage.Data.ChangeMoney(resourceType,resourceGain);
+            moneyStorage.ChangeMoney(resourceType,resourceGain);
         }
+    }
+    void OnDestroy(){
+        moneyStorage.ChangeGain(resourceType,-resourceGain/cooldown);
     }
 }

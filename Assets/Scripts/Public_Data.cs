@@ -3,16 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class Public_Data : MonoBehaviour
 {
-    [SerializeField] private string saveFileName;
+    #if UNITY_EDITOR
+        [SerializeField] private TMP_Text debugText;
+    #endif
+    [field:SerializeField] private List<string> resourceNames; // idk where to place it, so il do it here
+    private string saveFileName = "SaveFile1";
 
     public GameData Data {get;private set;}
-    private byte[] savedKey;
+    private byte[] savedKey = {54,12,251,237,79,132,131,72,49, 190, 207, 87, 224, 86,255,0};
     FileStream dataStream;
     string fullSaveFileName;
 
@@ -21,11 +26,9 @@ public class Public_Data : MonoBehaviour
         try
         {
             Aes IAes = Aes.Create();
-            savedKey = IAes.Key;
             byte[] inputIV = IAes.IV;
             if (Data != null){
-                string savePath = fullSaveFileName;     
-                dataStream = new FileStream(savePath,FileMode.Create); // creates new path to write on
+                dataStream = new FileStream(fullSaveFileName,FileMode.Create); // creates new path to write on
                 dataStream.Write(inputIV, 0, inputIV.Length);
                 CryptoStream newstream = new(dataStream,IAes.CreateEncryptor(savedKey,inputIV),CryptoStreamMode.Write); // encrypted text w/ location, idfk how this works
                 StreamWriter streamWriter = new(newstream); // creates new writer to write on
@@ -44,58 +47,78 @@ public class Public_Data : MonoBehaviour
         return succseded;
     }
     internal GameData Load(){
-        GameData Newdata = new();
+        GameData Newdata = new(resourceNames[0]);
         if (File.Exists(fullSaveFileName)){
             dataStream = new FileStream(fullSaveFileName, FileMode.Open);
-            // Create new AES instance.
             Aes oAes = Aes.Create();
-
-            // Create an array of correct size based on AES IV.
             byte[] outputIV = new byte[oAes.IV.Length];
-            
-            // Read the IV from the file.
             dataStream.Read(outputIV, 0, outputIV.Length);
-
-            // Create CryptoStream, wrapping FileStream
             CryptoStream oStream = new CryptoStream(
                    dataStream,
                    oAes.CreateDecryptor(savedKey, outputIV),
                    CryptoStreamMode.Read);
-
-            // Create a StreamReader, wrapping CryptoStream
             StreamReader reader = new StreamReader(oStream);
-            
-            // Read the entire file into a String value.
-            string text = reader.ReadToEnd();
-            // Always close a stream after usage.
+            Newdata = JsonUtility.FromJson<GameData>(reader.ReadToEnd());
             reader.Close();
-
-            // Deserialize the JSON data 
-            //  into a pattern matching the GameData class.
-            Newdata = JsonUtility.FromJson<GameData>(text);
         }
         return Newdata;
     }
-    // private GameData Load()
-    // {
-
-    // }
     private void Awake()
     {
-        fullSaveFileName = Application.persistentDataPath + "/" + (Application.isPlaying?saveFileName:"Development") + ".json";
-        Data = new();
+        fullSaveFileName = Application.persistentDataPath + "/" + (Application.isEditor?"Development":saveFileName) + ".json";
+        Data = Load();
         DontDestroyOnLoad(gameObject);
-        Load();
     }
+    internal void ChangeMoney(int resourceID,float ammount){ 
+        if (resourceID >= 0 && Data != null && Data.Resources != null){
+            if (resourceID < Data.Resources.Count && Data.Resources[resourceID] != null) { // failsafe to not break it.
+                Data.Resources[resourceID].Current += ammount;
+            }
+            else if (resourceNames[resourceID] != null && resourceNames[resourceID] != ""){
+                Resource newres = new(resourceNames[resourceID]);
+                newres.Current += ammount;
+                Data.Resources.Add(newres);
+            }
+        }
+    }
+    internal void ChangeGain(int resourceID,float ammount){
+        if (resourceID >= 0 && Data != null && Data.Resources != null){
+            if (resourceID < Data.Resources.Count && Data.Resources[resourceID] != null) { // failsafe to not break it.
+                Data.Resources[resourceID].Gain += ammount; 
+            }
+            else if (resourceNames[resourceID] != null && resourceNames[resourceID] != ""){
+                Resource newres = new(resourceNames[resourceID]);
+                newres.Gain += ammount;
+                Data.Resources.Add(newres);
+            }
+        }
+    }
+    void Update(){
+        #if UNITY_EDITOR
+            // if (Data != null){
+            //     string newtext = "DEBUG:\nResource1: "+Data.Resources[0].Current+"\n Gain1: "+Data.Resources[0].Gain;
+            //     debugText.text = newtext;
+            // }
+        #endif
+    }
+    void OnApplicationQuit()
+    {
+        bool saved = Save();
+        if (!saved) Debug.LogWarning("Something went wrong while saving data.");
+        else Debug.Log("Saved.");
+    }
+    
 }
 public class GameData{
-    public float[] Money {get; internal set;} = new float[3];
+    internal bool TutorialCompleted=false;
+    public List<Resource> Resources {get; internal set;}
     internal int[] Beings = new int[3]; 
     internal int[] Unlocks = new int[3];
-    internal void ChangeMoney(int resource,float ammount){ 
-        if (resource >= 0 && resource <= Money.Length) { // failsafe to not break it.
-            Money[resource] += ammount;
-            if (Application.isEditor) Debug.Log(Money[0]+" | "+Money[1]+" | "+ Money[2]);
-        }
+    public GameData(){
+        Resources = new();
+    }
+    public GameData(string firstresource){
+        Resources = new();
+        Resources.Add(new Resource(firstresource));
     }
 }
