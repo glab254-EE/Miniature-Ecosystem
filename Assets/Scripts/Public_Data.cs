@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Public_Data : MonoBehaviour
 {
-    [field:SerializeField] private List<Resource> baseResources; // idk where to place it, so il do it here
+    [field:SerializeField] internal List<Resource> baseResources; // idk where to place it, so il do it here
     private string saveFileName = "SaveFile1";
 
     public GameData Data {get;private set;}

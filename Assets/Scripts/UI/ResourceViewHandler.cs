@@ -8,6 +8,7 @@ public class ResourceViewHandler : MonoBehaviour
     [SerializeField] private GameObject template;
     [SerializeField] private Transform parent;
     [SerializeField] private Public_Data _Data;
+    private Rounderer _rounderer;
     private List<ResourceUIViewer> _currentResViewers;
     private int _lastResIDShowed;
     private int _allAvalResLastID;
@@ -16,7 +17,8 @@ public class ResourceViewHandler : MonoBehaviour
         if (clone.TryGetComponent<ResourceUIViewer>(out ResourceUIViewer newui)){
             newui._resSprite = resource1.ReferencedSprite;
             newui._resName = resource1.ResourceName;
-            newui._resOtherText = string.Format("{0}\n{1} в сек.",resource1.Current,resource1.Gain);
+            
+            newui._resOtherText = string.Format("{0} ед.\n{1} в сек.",_rounderer.ToRoundedString(resource1.Current),_rounderer.ToRoundedString(resource1.Gain));
             newui.referencedres = resource1;
             _currentResViewers.Add(newui);
         } else {
@@ -42,11 +44,12 @@ public class ResourceViewHandler : MonoBehaviour
         }
         for (int i = 0; i < _currentResViewers.Count; i ++){
             ResourceUIViewer viewer = _currentResViewers[i];
-            viewer._resOtherText = string.Format("{0}\n{1} в сек.",viewer.referencedres.Current,viewer.referencedres.Gain);
+            viewer._resOtherText = string.Format("{0} ед.\n{1} в сек.",_rounderer.ToRoundedString(viewer.referencedres.Current),_rounderer.ToRoundedString(viewer.referencedres.Gain));
         }
     }
     void Start()
     {
+        _rounderer = new();
         _currentResViewers = new();
         _allAvalResLastID = 0;
         _lastResIDShowed = -1;   

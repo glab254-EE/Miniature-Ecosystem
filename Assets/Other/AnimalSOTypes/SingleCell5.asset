@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: SingleCell5
   m_EditorClassIdentifier: 
   <BType>k__BackingField: 1
-  <MinMovementBounds>k__BackingField: {x: -4, y: -4}
-  <MaxMovementBounds>k__BackingField: {x: 4, y: 4}
+  <MinMovementBounds>k__BackingField: {x: -6, y: -6}
+  <MaxMovementBounds>k__BackingField: {x: 6, y: 6}
   <MovementSpeed>k__BackingField: 1
   <TurnDuration>k__BackingField: 0.5
   <MovementDelay>k__BackingField: 2
   <KeepVertical>k__BackingField: 0
-  <Animator>k__BackingField: {fileID: 0}
   <BaseSprite>k__BackingField: {fileID: 21300000, guid: 3958bc35c0c41a84c9a3e85d03b4122a, type: 3}
   <GainDelay>k__BackingField: 5
   <GainAmmount>k__BackingField: 50
@@ -28,3 +27,5 @@ MonoBehaviour:
     5"
   <AnimalResourceCost>k__BackingField: 16000
   <AnimalResourceSubstractID>k__BackingField: 1
+  <MinAnimalSize>k__BackingField: 0.3
+  <MaxAnimalSize>k__BackingField: 0.55

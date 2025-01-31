@@ -38,6 +38,10 @@ public class AnimalBehaivor : MonoBehaviour
    
     void Start()
     {
+        if (animalSO.MinAnimalSize > 0 && animalSO.MaxAnimalSize > 0){
+            float newsize = UnityEngine.Random.Range(animalSO.MinAnimalSize,animalSO.MaxAnimalSize);
+            transform.localScale = new Vector3(newsize,newsize,newsize);
+        }
         _minMovementBounds = animalSO.MinMovementBounds;
         _maxMovementBounds = animalSO.MaxMovementBounds;
         _moving = false;

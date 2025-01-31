@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -39,7 +37,7 @@ public class CameraMoveAndZoomController : MonoBehaviour
     }
     private void OnScroll(InputAction.CallbackContext callbackContext){
         Vector2 vector = callbackContext.ReadValue<Vector2>();
-        if (vector.y != 0){
+        if (vector.y != 0 && !PointerIsUIHit()){
             ScrollDriection = vector.y;
         }
     }
@@ -55,19 +53,19 @@ public class CameraMoveAndZoomController : MonoBehaviour
     private bool PointerIsUIHit()
     {
         if (EventSystem.current.IsPointerOverGameObject()){
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current); 
-        pointerEventData.position = Input.mousePosition; 
-        GraphicRaycaster gr = FindObjectOfType<Canvas>().GetComponent<GraphicRaycaster>(); 
-        List<RaycastResult> results = new List<RaycastResult>(); 
-        gr.Raycast(pointerEventData, results); 
-        if (results.Count != 0) 
-        {
-            foreach (RaycastResult raycastResult in results){
-                if (raycastResult.gameObject.layer != 2){
-                    return true;
+            PointerEventData pointerEventData = new PointerEventData(EventSystem.current); 
+            pointerEventData.position = Input.mousePosition; 
+            GraphicRaycaster gr = FindObjectOfType<Canvas>().GetComponent<GraphicRaycaster>(); 
+            List<RaycastResult> results = new List<RaycastResult>(); 
+            gr.Raycast(pointerEventData, results); 
+            if (results.Count != 0) 
+            {
+                foreach (RaycastResult raycastResult in results){
+                    if (raycastResult.gameObject.layer != 2){
+                        return true;
+                    }
                 }
             }
-        }
         }
         return false;
     }
