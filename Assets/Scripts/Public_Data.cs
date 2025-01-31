@@ -1,19 +1,12 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class Public_Data : MonoBehaviour
 {
-    #if UNITY_EDITOR
-        [SerializeField] private TMP_Text debugText;
-    #endif
-    [field:SerializeField] private List<string> resourceNames; // idk where to place it, so il do it here
+    [field:SerializeField] private List<Resource> baseResources; // idk where to place it, so il do it here
     private string saveFileName = "SaveFile1";
 
     public GameData Data {get;private set;}
@@ -47,7 +40,7 @@ public class Public_Data : MonoBehaviour
         return succseded;
     }
     internal GameData Load(){
-        GameData Newdata = new(resourceNames[0]);
+        GameData Newdata = new(baseResources[0].ResourceName);
         if (File.Exists(fullSaveFileName)){
             dataStream = new FileStream(fullSaveFileName, FileMode.Open);
             Aes oAes = Aes.Create();
@@ -74,8 +67,10 @@ public class Public_Data : MonoBehaviour
             if (resourceID < Data.Resources.Count && Data.Resources[resourceID] != null) { // failsafe to not break it.
                 Data.Resources[resourceID].Current += ammount;
             }
-            else if (resourceNames[resourceID] != null && resourceNames[resourceID] != ""){
-                Resource newres = new(resourceNames[resourceID]);
+            else if (baseResources.Count > resourceID){
+                Resource newres =  new(baseResources[resourceID].ResourceName);
+                Sprite sprite = baseResources[resourceID].ReferencedSprite;
+                newres.ReferencedSprite = sprite != null ? sprite : null;
                 newres.Current += ammount;
                 Data.Resources.Add(newres);
             }
@@ -86,20 +81,15 @@ public class Public_Data : MonoBehaviour
             if (resourceID < Data.Resources.Count && Data.Resources[resourceID] != null) { // failsafe to not break it.
                 Data.Resources[resourceID].Gain += ammount; 
             }
-            else if (resourceNames[resourceID] != null && resourceNames[resourceID] != ""){
-                Resource newres = new(resourceNames[resourceID]);
+            else if (baseResources.Count > resourceID){
+                Resource newres =  new(baseResources[resourceID].ResourceName);
+                Sprite sprite = baseResources[resourceID].ReferencedSprite;
+                newres.ReferencedSprite = sprite != null ? sprite : null;
                 newres.Gain += ammount;
+                Debug.Log(newres.ResourceName);
                 Data.Resources.Add(newres);
             }
         }
-    }
-    void Update(){
-        #if UNITY_EDITOR
-            // if (Data != null){
-            //     string newtext = "DEBUG:\nResource1: "+Data.Resources[0].Current+"\n Gain1: "+Data.Resources[0].Gain;
-            //     debugText.text = newtext;
-            // }
-        #endif
     }
     void OnApplicationQuit()
     {
@@ -112,8 +102,8 @@ public class Public_Data : MonoBehaviour
 public class GameData{
     internal bool TutorialCompleted=false;
     public List<Resource> Resources {get; internal set;}
-    internal int[] Beings = new int[3]; 
-    internal int[] Unlocks = new int[3];
+    internal List<AnimalsSO> Beings = new(); 
+    internal int Unlocked = 0;
     public GameData(){
         Resources = new();
     }

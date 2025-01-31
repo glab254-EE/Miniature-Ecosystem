@@ -11,20 +11,20 @@ public class AnimalBehaivor : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private Vector2 MovementBounds;
+    [SerializeField] internal AnimalsSO animalSO;
     [Header("Settings")]
-    [SerializeField] private BeingType animalType = BeingType.Animal_Herbinoves;
-    [SerializeField] private bool keepVertical = false;
-    [SerializeField] private float speed = 1;
-    [SerializeField] private float TurnDuration = 0.5f;
-    [SerializeField] private float movementDelay = 2;
-    [SerializeField] private Public_Data ReferencedData;
     private Vector2 _minMovementBounds;
     private Vector2 _maxMovementBounds;
     private bool _moving;
    int _currentPhase; // -1: dead, 0: standing / movement finished, 1:  movement
 
     float _phaseTick;
+    private Public_Data moneyStorage;
+    private float _gainCooldown;
+    private int _resourceType;
+    private float _resourceGain;
+    float cd;
+
     private Vector2 GetRandomPosVector(Vector2 min, Vector2 max){
         
         Vector2 output = min;
@@ -35,24 +35,11 @@ public class AnimalBehaivor : MonoBehaviour
         }
         return output;
     }
-    private Transform FindClosestHuntable(){
-        Transform output = null;
-        float closestdistance = -1;
-        foreach(AnimalBehaivor animal in FindObjectsOfType<AnimalBehaivor>()){
-            if ((animalType == BeingType.Animal_Predators&&animal.animalType != BeingType.Plant)||(animalType == BeingType.Animal_Herbinoves&&animal.animalType == BeingType.Plant)){
-                float distance = (transform.position-animal.transform.position).magnitude;
-                if ((closestdistance == -1||(distance < closestdistance)) && animal.gameObject != this.gameObject){
-                    closestdistance = distance;
-                    output = animal.transform;
-                }
-            }
-        }
-        return output;
-    }
+   
     void Start()
     {
-        _minMovementBounds = -MovementBounds;
-        _maxMovementBounds = MovementBounds;
+        _minMovementBounds = animalSO.MinMovementBounds;
+        _maxMovementBounds = animalSO.MaxMovementBounds;
         _moving = false;
         _phaseTick = 0; 
         if (spriteRenderer == null){
@@ -63,14 +50,29 @@ public class AnimalBehaivor : MonoBehaviour
         }  
         transform.position = GetRandomPosVector(_minMovementBounds,_maxMovementBounds);
         _currentPhase = 0;
+        if (animalSO.BaseSprite != null) { 
+            spriteRenderer.sprite = animalSO.BaseSprite;
+        }
+        // animal gain set-up
+        if (animalSO.GainAmmount > 0){
+            _gainCooldown = animalSO.GainDelay;
+            _resourceGain = animalSO.GainAmmount;
+            _resourceType = animalSO.ResourceID;
+            cd = _gainCooldown;
+            if (moneyStorage == null){
+                moneyStorage = FindObjectOfType<Public_Data>();
+                if (moneyStorage == null) Destroy ( gameObject);
+            }
+            moneyStorage.ChangeGain(_resourceType,_resourceGain/_gainCooldown);
+        }
     }
     private void RotateToTarget(Vector2 target){
         Vector2 vectorToTarget = target - (Vector2)transform.position;
-        if (!keepVertical){
+        if (!animalSO.KeepVertical){
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.DORotateQuaternion(q,TurnDuration).Play();
-        } else if (keepVertical && spriteRenderer != null){
+        transform.DORotateQuaternion(q,animalSO.TurnDuration).Play();
+        } else if (animalSO.KeepVertical && spriteRenderer != null){
             if (vectorToTarget.x >= 0){
                 spriteRenderer.flipX = false;
             } else {
@@ -78,26 +80,13 @@ public class AnimalBehaivor : MonoBehaviour
             }
         }
     }
-    private void RotateToTarget(Transform target){
-        Vector3 vectorToTarget = target.transform.position - transform.position;
-        if (!keepVertical){
-        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
-        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.DORotateQuaternion(q,TurnDuration).Play();
-        } else if (keepVertical && spriteRenderer != null){
-            if (vectorToTarget.x >= 0){
-                spriteRenderer.flipX = false;
-            } else {
-                spriteRenderer.flipX = true;
-            }
-        }
-    }
+  
     private IEnumerator RandomMovement(){
         _moving = true;
         Vector2 targetpos = GetRandomPosVector(_minMovementBounds,_maxMovementBounds);
         Tween currenttween = null;
         if (targetpos != null){
-            float desiredtime = Vector2.Distance((Vector2)transform.position,targetpos)/speed;
+            float desiredtime = Vector2.Distance((Vector2)transform.position,targetpos)/animalSO.MovementSpeed;
             currenttween = rb.DOMove(targetpos,desiredtime);
             RotateToTarget(targetpos);
             currenttween.Play();
@@ -106,43 +95,31 @@ public class AnimalBehaivor : MonoBehaviour
             _moving = false;
         }
     }
-    private IEnumerator Hunt(){
-        _moving = true;
-        Tween currenttween = null;
-        Vector3 oldpos = Vector3.zero;
-        while (_moving && _currentPhase == 2){
-            Transform targetpos = FindClosestHuntable(); // finds huntable being
-            if (currenttween != null){
-                currenttween.Kill();
-            }
-           if (targetpos != null && (oldpos == Vector3.zero || oldpos != targetpos.position)){
-                oldpos = targetpos.position;
-                Vector2 convertedtargetpos = oldpos;
-                float desiredtime = Vector2.Distance((Vector2)transform.position,targetpos.position)/speed;
-                RotateToTarget(targetpos);
-                currenttween = rb.DOMove((Vector2)oldpos,desiredtime);
-                currenttween.Play(); // runs towards it
-            }
-            yield return new WaitForSeconds(0.15f); // to not crash it...
-        }
-        _currentPhase = 0;
-    }
     void Update()
     {
-       if (animalType != BeingType.Plant ){ // checks if being is NOT plant.
-            if (_currentPhase == 0 && movementDelay >= 0){
-                if (_phaseTick >= movementDelay){
+        if (animalSO != null &&animalSO.BType != BeingType.Plant ){ // checks if being is NOT plant.
+            if (_currentPhase == 0 && animalSO.MovementDelay >= 0){
+                if (_phaseTick >= animalSO.MovementDelay){
                     _phaseTick = 0;
                     _currentPhase = 1;
                 } else {
                     _phaseTick+= Time.deltaTime;
                 }
-            } else if (_currentPhase == 1 && !_moving){
+            } else if (!_moving){
                 StartCoroutine(RandomMovement());
-            } else if (_currentPhase == 2 && !_moving){
-                StartCoroutine(Hunt());
             }
-        } else { // plant based animal.
+        } 
+        else { // plant based animal.
+        }
+        cd -= Time.deltaTime;
+        if (cd <= 0){
+            cd = _gainCooldown;
+            moneyStorage.ChangeMoney(_resourceType,_resourceGain);
+        }
+    }
+    void OnDestroy(){
+        if (_resourceGain>0){
+            moneyStorage.ChangeGain(_resourceType,-_resourceGain/_gainCooldown);
         }
     }
 }

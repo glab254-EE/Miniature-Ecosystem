@@ -4,6 +4,5 @@ using UnityEngine;
 
 public enum BeingType{
     Plant,
-    Animal_Herbinoves,
-    Animal_Predators,
+    Others,
 }
