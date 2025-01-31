@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class CameraMoveAndZoomController : MonoBehaviour
 {
@@ -42,8 +44,32 @@ public class CameraMoveAndZoomController : MonoBehaviour
         }
     }
     private void OnClick(InputAction.CallbackContext callbackContext){
-        dragging = callbackContext.ReadValueAsButton();
-        if (dragging) dragOrigin = Camera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 position = Pointer.current.position.ReadValue();
+        Ray ray = Camera.main.ScreenPointToRay(position);
+        if (dragging == true || !PointerIsUIHit()){
+            dragging = callbackContext.ReadValueAsButton();
+            if (dragging) dragOrigin = Camera.ScreenToWorldPoint(Input.mousePosition);
+        }
+    }
+
+    private bool PointerIsUIHit()
+    {
+        if (EventSystem.current.IsPointerOverGameObject()){
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current); 
+        pointerEventData.position = Input.mousePosition; 
+        GraphicRaycaster gr = FindObjectOfType<Canvas>().GetComponent<GraphicRaycaster>(); 
+        List<RaycastResult> results = new List<RaycastResult>(); 
+        gr.Raycast(pointerEventData, results); 
+        if (results.Count != 0) 
+        {
+            foreach (RaycastResult raycastResult in results){
+                if (raycastResult.gameObject.layer != 2){
+                    return true;
+                }
+            }
+        }
+        }
+        return false;
     }
     void OnDestroy(){
         _inAct.Player.OnZoom.performed -= OnScroll;

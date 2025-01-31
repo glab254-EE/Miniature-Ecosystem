@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 152352320}
   - component: {fileID: 152352319}
   - component: {fileID: 152352318}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: ClickArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,7 +310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1248,7 +1248,10 @@ MonoBehaviour:
   purchasableOptions:
   - {fileID: 11400000, guid: 5aa3152601693374d8fd1661fd8ca92e, type: 2}
   - {fileID: 11400000, guid: 6a2518823c65b9b4b924841081a8e349, type: 2}
-  - {fileID: 11400000, guid: 42b236ad48e4dd847af8a97b51eee60c, type: 2}
+  - {fileID: 11400000, guid: 829367e1101e3544cbf55b535d3f62ff, type: 2}
+  - {fileID: 11400000, guid: 0f483a0bd45161449bc5469373e66418, type: 2}
+  - {fileID: 11400000, guid: 3cdbd8b2714636a4485c35eb1130a20c, type: 2}
+  - {fileID: 11400000, guid: 75132bce3dde96640952bf19d064972d, type: 2}
   globalData: {fileID: 1137821221}
 --- !u!1 &543214777
 GameObject:
@@ -2846,10 +2849,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseResources:
-  - _resName: Proto-Carbon
+  - _resName: "\u041F\u0440\u043E\u0442\u043E \u0423\u0433\u043B\u0435\u0440\u043E\u0434"
     ReferencedSprite: {fileID: 21300000, guid: b8f3e9e0ec46caa4ca292ff7446d3d5f, type: 3}
-  - _resName: Sigmas
-    ReferencedSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  - _resName: "\u0410\u043C\u0438\u043D\u043E\u043A\u0438\u0441\u043B\u043E\u0442\u0430"
+    ReferencedSprite: {fileID: 21300000, guid: a7250db90360ed04fac2af694033347d, type: 3}
+  - _resName: "\u0414\u041D\u041A"
+    ReferencedSprite: {fileID: 21300000, guid: da53c8c7d511d724b92c7da38fa9fbb8, type: 3}
 --- !u!4 &1137821222
 Transform:
   m_ObjectHideFlags: 0
@@ -3011,7 +3016,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: -0.00018310547}
+  m_AnchoredPosition: {x: 0.00012207031, y: -0.00018310547}
   m_SizeDelta: {x: -5.2, y: -14.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1303806472
@@ -3919,7 +3924,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0001567242}
+  m_AnchoredPosition: {x: 0, y: 0.0005567057}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1801228757
