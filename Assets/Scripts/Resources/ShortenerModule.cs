@@ -8,7 +8,7 @@ public class Rounderer{
         } else if (current<1000000&&current>1000){
             output = Math.Round(current/1000,2).ToString()+"K";
         } else {
-            output = Math.Round(current,1).ToString();
+            output = Math.Round(current,2).ToString();
         }
         return output;
     }

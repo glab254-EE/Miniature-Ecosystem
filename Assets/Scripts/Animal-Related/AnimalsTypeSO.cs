@@ -25,6 +25,4 @@ public class AnimalsSO : ScriptableObject
     [field:SerializeField] public int AnimalResourceSubstractID{get;internal set;} = 0;
     [field:SerializeField] public float MinAnimalSize{get; internal set;} = 0.9f;
     [field:SerializeField] public float MaxAnimalSize{get; internal set;} = 1.1f;
-
-    
 }

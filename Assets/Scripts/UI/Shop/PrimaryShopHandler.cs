@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,6 +59,7 @@ public class PrimaryShopHandler : MonoBehaviour
             for (int i =0; i < _currentbuyammount; i++){
                 GameObject cloned = Instantiate(animalTemplate);
                 cloned.GetComponent<AnimalBehaivor>().animalSO = animal;
+                globalData.Data.Beings.Add(animal);
             }
         }
     }

@@ -210,8 +210,9 @@ MonoBehaviour:
   button: {fileID: 3294702751270518765}
   animal_Name: {fileID: 4011170854553434620}
   animal_Cost: {fileID: 1731847844360814182}
-  animal_CostedResourcePreview: {fileID: 354019659521391620}
   animal_Gain: {fileID: 3721475909281804404}
+  purchaseButton_Text: {fileID: 7950953145960496447}
+  animal_CostedResourcePreview: {fileID: 354019659521391620}
   animal_GainResourcePreview: {fileID: 6935776430561982111}
 --- !u!1 &4493218423660101669
 GameObject:
@@ -591,7 +592,7 @@ RectTransform:
   m_Father: {fileID: 4309935371644804955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.05, y: 0.05}
-  m_AnchorMax: {x: 0.68, y: 0.94000006}
+  m_AnchorMax: {x: 0.55, y: 0.94}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -779,7 +780,7 @@ RectTransform:
   - {fileID: 5496726036960510214}
   m_Father: {fileID: 4309935371644804955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.55418515, y: 0.05}
+  m_AnchorMin: {x: 0.475, y: 0.05}
   m_AnchorMax: {x: 0.93700004, y: 0.25}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}

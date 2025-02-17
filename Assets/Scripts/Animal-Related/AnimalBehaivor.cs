@@ -13,6 +13,7 @@ public class AnimalBehaivor : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] internal AnimalsSO animalSO;
     [Header("Settings")]
+    [SerializeField] private float randomSpeedDivider = 10f; // used for a bit of randomness of movement.
     private Vector2 _minMovementBounds;
     private Vector2 _maxMovementBounds;
     private bool _moving;
@@ -91,6 +92,7 @@ public class AnimalBehaivor : MonoBehaviour
         Tween currenttween = null;
         if (targetpos != null){
             float desiredtime = Vector2.Distance((Vector2)transform.position,targetpos)/animalSO.MovementSpeed;
+            float tweenTime = desiredtime+UnityEngine.Random.Range(-desiredtime/randomSpeedDivider,desiredtime/randomSpeedDivider);
             currenttween = rb.DOMove(targetpos,desiredtime);
             RotateToTarget(targetpos);
             currenttween.Play();

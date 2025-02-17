@@ -25,7 +25,7 @@ MonoBehaviour:
   <ResourceID>k__BackingField: 0
   <animalName>k__BackingField: "\u041E\u0434\u043D\u043E\u043A\u043B\u0435\u0442.
     1"
-  <AnimalResourceCost>k__BackingField: 45
+  <AnimalResourceCost>k__BackingField: 40
   <AnimalResourceSubstractID>k__BackingField: 0
   <MinAnimalSize>k__BackingField: 0.1
   <MaxAnimalSize>k__BackingField: 0.35
