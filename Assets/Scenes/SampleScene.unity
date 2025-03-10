@@ -225,7 +225,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 152352316}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 1137821221}
   button: {fileID: 152352319}
-  resourcePerClick: 1
+  resourcePerClick: 50
   resourceID: 0
 --- !u!114 &152352319
 MonoBehaviour:
@@ -265,13 +265,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -333,7 +333,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 152352316}
-  m_CullTransparentMesh: 1
+  m_CullTransparentMesh: 0
 --- !u!1 &194023918
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,6 +1336,7 @@ MonoBehaviour:
   LowerLimits: {x: -5, y: -4}
   UpperLimits: {x: 4, y: 5}
   MoveSpeed: 85
+  AnimalsTag: Animals
 --- !u!1 &533999778
 GameObject:
   m_ObjectHideFlags: 0
@@ -1749,7 +1750,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 916737171}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99963766
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2125,7 +2126,7 @@ GameObject:
   - component: {fileID: 709305549}
   m_Layer: 0
   m_Name: Animals
-  m_TagString: Untagged
+  m_TagString: Animals
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2228,7 +2229,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1869535021}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9244418
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3035,12 +3036,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseResources:
-  - _resName: "\u041F\u0440\u043E\u0442\u043E \u0423\u0433\u043B\u0435\u0440\u043E\u0434"
-    ReferencedSprite: {fileID: 21300000, guid: b8f3e9e0ec46caa4ca292ff7446d3d5f, type: 3}
-  - _resName: "\u0410\u043C\u0438\u043D\u043E\u043A\u0438\u0441\u043B\u043E\u0442\u0430"
-    ReferencedSprite: {fileID: 21300000, guid: a7250db90360ed04fac2af694033347d, type: 3}
-  - _resName: "\u0414\u041D\u041A"
-    ReferencedSprite: {fileID: 21300000, guid: da53c8c7d511d724b92c7da38fa9fbb8, type: 3}
+  - ResourceName: "\u041F\u0440\u043E\u0442\u043E-\u0423\u0433\u043B\u0435\u0440\u043E\u0434"
+    ReferencedSprite: 0
+  - ResourceName: "\u0410\u043C\u0438\u043D\u043E\u043A\u0438\u0441\u043B\u043E\u0442\u0430"
+    ReferencedSprite: 1
+  - ResourceName: "\u0414\u041D\u041A"
+    ReferencedSprite: 2
+  baseSprites:
+  - {fileID: 21300000, guid: b8f3e9e0ec46caa4ca292ff7446d3d5f, type: 3}
+  - {fileID: 21300000, guid: a7250db90360ed04fac2af694033347d, type: 3}
+  - {fileID: 21300000, guid: da53c8c7d511d724b92c7da38fa9fbb8, type: 3}
   animalPrefab: {fileID: 43270388166678799, guid: 814b6e0b90116bf4196bd376bf397cca, type: 3}
   animalsParent: {fileID: 709305549}
 --- !u!4 &1137821222
@@ -3332,7 +3337,7 @@ Transform:
   m_GameObject: {fileID: 1286268645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50, y: 50, z: 0}
+  m_LocalPosition: {x: 53.12, y: 42.77, z: 0}
   m_LocalScale: {x: 4.88, y: 4.88, z: 4.88}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -3424,7 +3429,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00018310547}
+  m_AnchoredPosition: {x: 0.021118164, y: -0.00018310547}
   m_SizeDelta: {x: -5.2, y: -14.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1303806472
@@ -4332,7 +4337,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00002002716}
+  m_AnchoredPosition: {x: 0, y: 2.4340584}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1801228757

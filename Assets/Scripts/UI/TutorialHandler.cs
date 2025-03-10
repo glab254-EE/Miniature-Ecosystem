@@ -25,8 +25,6 @@ public class TutorialHandler : MonoBehaviour
         if (!_tutorialCompleted){
             _inAct.Player.Fire.performed += NextSlide;
             _inAct.Player.Fire.Enable();
-        }
-        if (!dataReference.Data.TutorialCompleted){
             slides[_slide].SetActive(true);
         }
     }

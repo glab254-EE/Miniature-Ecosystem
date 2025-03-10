@@ -14,6 +14,8 @@ public class ResourceClick : MonoBehaviour
         button.onClick.AddListener(OnClick);
     }
     void OnClick(){
-        data.ChangeMoney(resourceID,resourcePerClick);
+        if (data.Data.TutorialCompleted){
+            data.ChangeMoney(resourceID,resourcePerClick);
+        }
     }
 }

@@ -14,10 +14,11 @@ public class AnimalBehaivor : MonoBehaviour
     [SerializeField] internal AnimalsSO animalSO;
     [Header("Settings")]
     [SerializeField] private float randomSpeedDivider = 10f; // used for a bit of randomness of movement.
+    internal bool Dragged;
     private Vector2 _minMovementBounds;
     private Vector2 _maxMovementBounds;
     private bool _moving;
-   int _currentPhase; // -1: dead, 0: standing / movement finished, 1:  movement
+    int _currentPhase; // -1: dead, 0: standing / movement finished, 1:  movement
 
     float _phaseTick;
     private Public_Data moneyStorage;
@@ -103,7 +104,7 @@ public class AnimalBehaivor : MonoBehaviour
     }
     void Update()
     {
-        if (animalSO != null &&animalSO.BType != BeingType.Plant ){ // checks if being is NOT plant.
+        if (animalSO != null &&animalSO.BType != BeingType.Plant && !Dragged){ // checks if being is NOT plant.
             if (_currentPhase == 0 && animalSO.MovementDelay >= 0){
                 if (_phaseTick >= animalSO.MovementDelay){
                     _phaseTick = 0;

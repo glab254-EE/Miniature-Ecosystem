@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 8080040622662550625}
   - component: {fileID: 2414611077285339493}
   - component: {fileID: 5617221292537644817}
+  - component: {fileID: 1056916160080509665}
   - component: {fileID: 2104395636977404146}
   m_Layer: 0
   m_Name: Base-Animal
-  m_TagString: Untagged
+  m_TagString: Animals
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,6 +103,20 @@ MonoBehaviour:
   rb: {fileID: 2104395636977404146}
   spriteRenderer: {fileID: 2414611077285339493}
   animalSO: {fileID: 0}
+  randomSpeedDivider: 10
+--- !u!114 &1056916160080509665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43270388166678799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0940f3fc3ed28a34f8af51497a16369d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 4
 --- !u!50 &2104395636977404146
 Rigidbody2D:
   serializedVersion: 4

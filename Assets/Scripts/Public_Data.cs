@@ -1,43 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
-using Unity.VisualScripting;
 using UnityEngine;
-
-
+using Newtonsoft.Json;
+using Unity.VisualScripting;
 public class Public_Data : MonoBehaviour
 {
     [field:SerializeField] internal List<Resource> baseResources; // idk where to place it, so il do it here
+    [field:SerializeField] internal List<Sprite> baseSprites; // idk where to place it, so il do it here
     [SerializeField] private GameObject animalPrefab;
     [SerializeField] private Transform animalsParent;
-    private string saveFileName = "SaveFile1";
 
-    public GameData Data {get;private set;}
-    private byte[] savedKey = {54,12,251,237,79,132,131,72,49, 190, 207, 87, 224, 86,255,0};
-    FileStream dataStream;
-    string fullSaveFileName;
+    internal GameData Data;
 
     internal bool Save()
     {
         bool succseded = false;
         try
         {
-            Aes IAes = Aes.Create();
-            byte[] inputIV = IAes.IV;
-            if (Data != null){
-                if (File.Exists(fullSaveFileName)) File.Delete(fullSaveFileName);
-                dataStream = new FileStream(fullSaveFileName,FileMode.Create); // creates new path to write on
-                dataStream.Write(inputIV, 0, inputIV.Length);
-                CryptoStream newstream = new(dataStream,IAes.CreateEncryptor(savedKey,inputIV),CryptoStreamMode.Write); // encrypted text w/ location, idfk how this works
-                StreamWriter streamWriter = new(newstream); // creates new writer to write on
-                string _text = JsonUtility.ToJson(Data);
-                streamWriter.Write(_text);
-                streamWriter.Close();
-                newstream.Close();
-                dataStream.Close();
+            string _DataString = JsonConvert.SerializeObject(Data);
+            Debug.Log(_DataString);
+            if (_DataString != null && _DataString != "null"){
+                SecurePlayerPrefs.SetString("Game_Data",_DataString);
+                SecurePlayerPrefs.Save();
                 succseded = true;
-            } 
+            }
         }
         catch (System.Exception Err)
         {
@@ -51,33 +38,28 @@ public class Public_Data : MonoBehaviour
         GameData Newdata = new(baseResources[0].ResourceName);
         try
         {
-            if (File.Exists(fullSaveFileName))
-            {
-                dataStream = new FileStream(fullSaveFileName, FileMode.Open);
-                Aes oAes = Aes.Create();
-                byte[] outputIV = new byte[oAes.IV.Length];
-                dataStream.Read(outputIV, 0, outputIV.Length);
-                CryptoStream oStream = new CryptoStream(
-                    dataStream,
-                    oAes.CreateDecryptor(savedKey, outputIV),
-                    CryptoStreamMode.Read);
-                StreamReader reader = new StreamReader(oStream);
-                string _text = reader.ReadToEnd();
-                Newdata = JsonUtility.FromJson<GameData>(_text);
-                if (Newdata != null && Newdata.Beings != null){
-                    foreach (AnimalsSO Animal in Newdata.Beings){
-                        GameObject newobject = Instantiate(animalPrefab,animalsParent);
-                        if (newobject.TryGetComponent<AnimalBehaivor>(out AnimalBehaivor behaivor)){
-                            behaivor.animalSO = Animal;
-                        } else {
-                            Destroy(newobject);
+            
+            if (SecurePlayerPrefs.HasKey("Game_Data")){
+                string _Data = SecurePlayerPrefs.GetString("Game_Data","{}");
+                Debug.Log(_Data);
+                if (_Data == null || _Data == "null")
+                {
+                    SecurePlayerPrefs.DeleteKey("Game_Data");
+                    Debug.LogError("Null was not expected.");
+                    return new GameData(baseResources[0].ResourceName);
+                } 
+                else 
+                {
+                    GameData _GData = JsonConvert.DeserializeObject<GameData>(_Data);
+                    if (_GData.Beings.Count > 0){
+                        foreach (AnimalsSO animal in Data.Beings){
+                            GameObject cloned = Instantiate(animalPrefab);
+                            cloned.GetComponent<AnimalBehaivor>().animalSO = animal;
                         }
                     }
+                    Newdata = _GData;
                 }
-                Debug.Log(_text);
-                reader.Close();
-                oStream.Close();
-                dataStream.Close();
+
             }
         }
         catch (System.Exception Err){
@@ -88,10 +70,9 @@ public class Public_Data : MonoBehaviour
     }
     private void Awake()
     {
-        fullSaveFileName = Application.persistentDataPath + "/" + (Application.isEditor?"Development":saveFileName) + ".json";
+        SecurePlayerPrefs.Init();
         Data = Load();
-        DontDestroyOnLoad(gameObject);
-        
+        DontDestroyOnLoad(gameObject);   
     }
     internal void ChangeMoney(int resourceID,float ammount)
     { 
@@ -101,8 +82,6 @@ public class Public_Data : MonoBehaviour
             }
             else if (baseResources.Count > resourceID){
                 Resource newres =  new(baseResources[resourceID].ResourceName);
-                Sprite sprite = baseResources[resourceID].ReferencedSprite;
-                newres.ReferencedSprite = sprite != null ? sprite : null;
                 newres.Current += ammount;
                 Data.Resources.Add(newres);
             }
@@ -116,10 +95,7 @@ public class Public_Data : MonoBehaviour
             }
             else if (baseResources.Count > resourceID){
                 Resource newres =  new(baseResources[resourceID].ResourceName);
-                Sprite sprite = baseResources[resourceID].ReferencedSprite;
-                newres.ReferencedSprite = sprite != null ? sprite : null;
                 newres.Gain += ammount;
-                Debug.Log(newres.ResourceName);
                 Data.Resources.Add(newres);
             }
         }
@@ -136,7 +112,7 @@ public class Public_Data : MonoBehaviour
 public class GameData
 {
     internal bool TutorialCompleted=false;
-    public List<Resource> Resources {get; internal set;}
+    internal List<Resource> Resources;
     internal List<AnimalsSO> Beings = new(); 
     internal int Unlocked = 0;
     public GameData(){

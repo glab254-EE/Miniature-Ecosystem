@@ -17,9 +17,9 @@ public class PrimaryShopHandler : MonoBehaviour
     int currentBuyingAmmount = 1;
     int unlockedlastanimal = -1; 
     int lastPurchasedAnimal = -1;
-    private int CalculateMaxPurchase(float cost, float currentbuy){
+    private int CalculateMaxPurchase(double cost, double currentbuy){
         int output = 0;
-        float leftovers = currentbuy;
+        double leftovers = currentbuy;
         while (true){
             if (leftovers < cost) break;
             output++;
@@ -27,9 +27,9 @@ public class PrimaryShopHandler : MonoBehaviour
         }
         return output;
     }
-    private int CalculateMaxPurchase(float cost, float currentbuy, int max){
+    private int CalculateMaxPurchase(double cost, double currentbuy, int max){
         int output = 0;
-        float leftovers = currentbuy;
+        double leftovers = currentbuy;
         for (int i = 0; i < max; i++){
             if (leftovers < cost) break;
             output++;
@@ -49,7 +49,7 @@ public class PrimaryShopHandler : MonoBehaviour
             _currentbuyammount = 1;
         }
 
-        if (globalData.Data.Resources.Count >= neededresID && globalData.Data.Resources[neededresID].Current >= animal.AnimalResourceCost*_currentbuyammount){
+        if (globalData.Data.Resources.Count > neededresID && globalData.Data.Resources[neededresID].Current > animal.AnimalResourceCost*_currentbuyammount){
             if (lastPurchasedAnimal < id){
                 lastPurchasedAnimal=id;
                 globalData.Data.Unlocked++;
@@ -69,11 +69,13 @@ public class PrimaryShopHandler : MonoBehaviour
             option.Animal = animal;
             newGO.name = animal.animalName;
             visibleOptions.Add(newGO);
-            if (globalData.baseResources[animal.ResourceID].ReferencedSprite != null){
-                option.ResourcegainSprite = globalData.baseResources[animal.ResourceID].ReferencedSprite;
+            if (globalData.baseResources[animal.ResourceID].ReferencedSprite != -1){
+                Sprite sprite = globalData.baseSprites[globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite];
+                option.ResourceneededSprite = sprite;
             }
-            if (globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite != null){
-                option.ResourceneededSprite = globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite;
+            if (globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite != -1){
+                Sprite sprite = globalData.baseSprites[globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite];
+                option.ResourceneededSprite = sprite;
             }
 
             option.button.onClick.AddListener(()=>{
