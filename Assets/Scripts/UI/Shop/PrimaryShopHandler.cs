@@ -10,7 +10,7 @@ public class PrimaryShopHandler : MonoBehaviour
     [SerializeField] private GameObject animalTemplate;
     [SerializeField]  private List<Button> AmmountButtons;
     [SerializeField]  private List<int> AmmountOptions;
-    [SerializeField] private List<AnimalsSO> purchasableOptions;
+    [SerializeField] internal List<AnimalsSO> purchasableOptions; // changed to internal for letting data access it.
     [SerializeField] private Public_Data globalData;
     private List<GameObject> visibleOptions;
     private Dictionary<Button,int> purchaseAmmountSelect;
@@ -53,13 +53,18 @@ public class PrimaryShopHandler : MonoBehaviour
             if (lastPurchasedAnimal < id){
                 lastPurchasedAnimal=id;
                 globalData.Data.Unlocked++;
-                Debug.Log(globalData.Data.Unlocked);
             }
             globalData.Data.Resources[neededresID].Current -= animal.AnimalResourceCost*_currentbuyammount;
             for (int i =0; i < _currentbuyammount; i++){
                 GameObject cloned = Instantiate(animalTemplate);
                 cloned.GetComponent<AnimalBehaivor>().animalSO = animal;
-                globalData.Data.Beings.Add(animal);
+                if (globalData.Data.purchasedAnimals.Count <= id)
+                {
+                    globalData.Data.purchasedAnimals.Add(1);
+                } else 
+                {
+                    globalData.Data.purchasedAnimals[id] += 1;
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 using System;
 
 public class Rounderer{
-    public string ToRoundedString(float current){
+    public string ToRoundedString(double current){
         string output = current.ToString();
         if (current<1000000000&&current>100000){
             output = Math.Round(current/1000000,2).ToString()+"M";

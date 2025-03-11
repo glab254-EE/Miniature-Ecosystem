@@ -17,15 +17,16 @@ public class CameraMoveAndZoomController : MonoBehaviour
     [SerializeField] private Vector2 UpperLimits;
     [SerializeField] private float MoveSpeed = 2;
     [Tooltip("Representing tag where animals are 'connected' to.")]
-    [SerializeField] private string AnimalsTag = "Animals";
+    internal bool Dragginganimal = false;
     private Vector3 resetPosition;
     private Vector3 difference;
     private Vector3 dragOrigin;
     private Camera _Camera;
     private InputSys _inAct;
     float ScrollDriection;
-    bool dragging = false;
-    void Awake(){
+    bool draggingCamera = false;
+    void Awake()
+    {
         _Camera = Camera.main;
         resetPosition = _Camera.transform.position;
         ScrollDriection = 0f;
@@ -37,7 +38,8 @@ public class CameraMoveAndZoomController : MonoBehaviour
 
         _inAct.Player.OnZoom.Enable();
     }
-    private void OnScroll(InputAction.CallbackContext callbackContext){
+    private void OnScroll(InputAction.CallbackContext callbackContext)
+    {
         Vector2 vector = callbackContext.ReadValue<Vector2>();
         if (vector.y != 0 && !PointerIsUIHit()){
             ScrollDriection = vector.y;
@@ -46,20 +48,12 @@ public class CameraMoveAndZoomController : MonoBehaviour
     private void OnClick(InputAction.CallbackContext callbackContext){
         Vector2 position = Pointer.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(position);
-        if (dragging == true || !PointerIsUIHit()){
-            dragging = callbackContext.ReadValueAsButton();
-            if (dragging) dragOrigin = _Camera.ScreenToWorldPoint(Input.mousePosition);
+        if (draggingCamera == true || !PointerIsUIHit() && !Dragginganimal)
+        {
+            draggingCamera = callbackContext.ReadValueAsButton();
+            if (draggingCamera) dragOrigin = _Camera.ScreenToWorldPoint(Input.mousePosition);
         }
     }
-    private GameObject CheckForObjectUnderMouse()
-    {
-        Vector2 touchPostion = _Camera.ScreenToWorldPoint(Input.mousePosition);
-
-        RaycastHit2D hit2D = Physics2D.Raycast(touchPostion, Vector2.zero, float.MaxValue,~2);
-
-        return hit2D.collider != null ? hit2D.collider.gameObject : null;
-    }
-
     private bool PointerIsUIHit()
     {
         if (EventSystem.current.IsPointerOverGameObject()){
@@ -68,7 +62,6 @@ public class CameraMoveAndZoomController : MonoBehaviour
             GraphicRaycaster gr = FindObjectOfType<Canvas>().GetComponent<GraphicRaycaster>(); 
             List<RaycastResult> results = new List<RaycastResult>(); 
             gr.Raycast(pointerEventData, results); 
-            GameObject hit = CheckForObjectUnderMouse() ?? null;
             if (results.Count != 0 ) 
             {
                 foreach (RaycastResult raycastResult in results){
@@ -76,7 +69,7 @@ public class CameraMoveAndZoomController : MonoBehaviour
                         return true;
                     }
                 }
-            } else if (hit != null && hit.CompareTag(AnimalsTag) == true) return true;
+            } 
         }
         return false;
     }
@@ -94,7 +87,7 @@ public class CameraMoveAndZoomController : MonoBehaviour
         ScrollDriection = 0;
         // end scroll, start moving
         difference = _Camera.ScreenToWorldPoint(Input.mousePosition)-_Camera.transform.position;
-        if (dragging){
+        if (draggingCamera && !Dragginganimal){
             float moveX = dragOrigin.x - difference.x;
             float moveY = dragOrigin.y - difference.y;
             Vector3 targetvector = new Vector3(Mathf.Clamp(moveX,LowerLimits.x,UpperLimits.x),Mathf.Clamp(moveY,LowerLimits.x,UpperLimits.y),_Camera.transform.position.z);

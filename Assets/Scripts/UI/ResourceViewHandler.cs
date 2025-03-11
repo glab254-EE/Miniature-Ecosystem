@@ -16,7 +16,7 @@ public class ResourceViewHandler : MonoBehaviour
     {
         GameObject clone = Instantiate(template,parent);
         if (clone.TryGetComponent<ResourceUIViewer>(out ResourceUIViewer newui)){
-            newui._resName = resource1.ResourceName;
+            newui._resName = _Data.resourceNames[resource1.ResourceNameID];
             
             newui._resOtherText = string.Format("{0} ед.\n{1} в сек.",_rounderer.ToRoundedString(resource1.Current),_rounderer.ToRoundedString(resource1.Gain));
             newui.referencedres = resource1;
@@ -30,7 +30,7 @@ public class ResourceViewHandler : MonoBehaviour
         GameObject clone = Instantiate(template,parent);
         if (clone.TryGetComponent<ResourceUIViewer>(out ResourceUIViewer newui)){
             newui._resSprite = _Data.baseSprites[sprite];
-            newui._resName = resource1.ResourceName;
+            newui._resName = _Data.resourceNames[resource1.ResourceNameID];
             
             newui._resOtherText = string.Format("{0} ед.\n{1} в сек.",_rounderer.ToRoundedString(resource1.Current),_rounderer.ToRoundedString(resource1.Gain));
             newui.referencedres = resource1;

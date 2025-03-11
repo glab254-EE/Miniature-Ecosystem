@@ -3,39 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Dragable : MonoBehaviour, IBeginDragHandler, IEndDragHandler
+[RequireComponent(typeof(AnimalBehaivor))]
+public class Dragable : MonoBehaviour
 {
     [SerializeField] private float Speed;
     private Camera _Camera;
-    private GameObject _target;
-    private AnimalBehaivor _targetAnimalBehaivor;
+    bool isdragging;
+    private AnimalBehaivor selfAnimalBehaivor;
+    CameraMoveAndZoomController cameraMoveBeh;
     private void Start()
     {
-        _Camera = Camera.current;
+        selfAnimalBehaivor = GetComponent<AnimalBehaivor>();
+        _Camera = Camera.main;
     }
-    public void OnBeginDrag(PointerEventData eventData)
+    private void OnMouseDown()
     {
-        _target = gameObject;
-        if (_target.TryGetComponent<AnimalBehaivor>(out _targetAnimalBehaivor))
+        isdragging = true;
+        if (_Camera.gameObject.TryGetComponent<CameraMoveAndZoomController>(out cameraMoveBeh))
         {
-            _targetAnimalBehaivor.Dragged = true;
+            cameraMoveBeh.Dragginganimal = true;
+            Debug.Log(cameraMoveBeh.Dragginganimal);
         }
     }
-    public void OnEndDrag(PointerEventData eventData)
+    private void OnMouseUp()
     {
-        if (_target != null){
-            if (_targetAnimalBehaivor != null)
-            {
-                _targetAnimalBehaivor.Dragged = false;
-            }
-            _target = null;
+        isdragging = false;
+        selfAnimalBehaivor.Dragged  = false;
+        if (cameraMoveBeh != null)
+        {
+            cameraMoveBeh.Dragginganimal = false;
         }
-    }
+    } 
     void Update()
     {
-        if (_target != null && _target.transform != null){
-            Vector3 movementVector = Vector3.Lerp(_target.transform.position,_Camera.ScreenToWorldPoint(Input.mousePosition),Time.deltaTime*Speed);
-            _target.transform.position = movementVector;
+        if (isdragging){
+            Vector3 movementVector = Vector3.Lerp(transform.position,_Camera.ScreenToWorldPoint(Input.mousePosition),Time.deltaTime*Speed);
+            transform.position = movementVector;
+            if (selfAnimalBehaivor.Dragged == false) selfAnimalBehaivor.Dragged= true;
         }
     }
 }
