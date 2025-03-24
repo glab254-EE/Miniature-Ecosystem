@@ -15,6 +15,7 @@ public class PrimaryShopHandler : MonoBehaviour
     private List<GameObject> visibleOptions;
     private Dictionary<Button,int> purchaseAmmountSelect;
     int currentBuyingAmmount = 1;
+    [SerializeField] List<Unlockable> unlocked;
     int unlockedlastanimal = -1; 
     int lastPurchasedAnimal = -1;
     private int CalculateMaxPurchase(double cost, double currentbuy){

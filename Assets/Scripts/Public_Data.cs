@@ -13,7 +13,7 @@ public class Public_Data : MonoBehaviour
     [SerializeField] private PrimaryShopHandler shopData;
     [SerializeField] private GameObject animalPrefab;
     [SerializeField] private Transform animalsParent;
-
+    internal Public_Data instance;
     internal GameData Data;
 
     internal bool Save()
@@ -73,6 +73,17 @@ public class Public_Data : MonoBehaviour
                             }
                         }
                     }
+                    for (int i=0;i<_GData.Resources.Count;i++)
+                    {
+                        if (_GData.Resources[i].ReferencedSprite < 0)
+                        {
+                            _GData.Resources[i].ReferencedSprite = 0;
+                        }
+                        if (_GData.Resources[i].ResourceNameID < 0)
+                        {
+                            _GData.Resources[i].ResourceNameID = 0;
+                        }
+                    }
                     Newdata = _GData;
                 }
 
@@ -86,7 +97,9 @@ public class Public_Data : MonoBehaviour
     }
     private void Awake()
     {
+        if (instance != null) Destroy(gameObject);
         if (shopData == null) shopData = FindAnyObjectByType<PrimaryShopHandler>();
+        instance = this;
         SecurePlayerPrefs.Init();
         Data = Load();
         DontDestroyOnLoad(gameObject);   

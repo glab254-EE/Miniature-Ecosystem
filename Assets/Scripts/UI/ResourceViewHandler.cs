@@ -30,7 +30,11 @@ public class ResourceViewHandler : MonoBehaviour
         GameObject clone = Instantiate(template,parent);
         if (clone.TryGetComponent<ResourceUIViewer>(out ResourceUIViewer newui)){
             newui._resSprite = _Data.baseSprites[sprite];
-            newui._resName = _Data.resourceNames[resource1.ResourceNameID];
+            if (resource1.ResourceNameID <= 0){
+            newui._resName = _Data.resourceNames[0];
+            } else {
+                newui._resName = _Data.resourceNames[resource1.ResourceNameID];
+            }
             
             newui._resOtherText = string.Format("{0} ед.\n{1} в сек.",_rounderer.ToRoundedString(resource1.Current),_rounderer.ToRoundedString(resource1.Gain));
             newui.referencedres = resource1;
@@ -54,7 +58,7 @@ public class ResourceViewHandler : MonoBehaviour
                 _lastResIDShowed = i;
                 Resource res = _Data.Data.Resources[i]; // blia, forgot another data 😭😭😭
                 if (res != null ){
-                    if (_Data.baseResources.Count > i && _Data.baseResources[i].ReferencedSprite != -1)
+                    if (_Data.baseResources.Count > i && _Data.baseResources[i].ReferencedSprite >= 0)
                     {
                         CreateResourceViewer(res,_Data.baseResources[i].ReferencedSprite);
                     } else CreateResourceViewer(res);
