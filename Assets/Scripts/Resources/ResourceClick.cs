@@ -11,6 +11,7 @@ public class ResourceClick : MonoBehaviour
     [SerializeField] private int resourceID;
     void Start()
     {
+        data = Public_Data.instance;
         button.onClick.AddListener(OnClick);
     }
     void OnClick(){

@@ -10,10 +10,10 @@ public class Public_Data : MonoBehaviour
     [field:SerializeField] internal List<Resource> baseResources; // idk where to place it, so il do it here
     [field:SerializeField] internal List<Sprite> baseSprites; // idk where to place it, so il do it here
     [field:SerializeField] internal List<string> resourceNames;
-    [SerializeField] private PrimaryShopHandler shopData;
     [SerializeField] private GameObject animalPrefab;
     [SerializeField] private Transform animalsParent;
-    internal Public_Data instance;
+    private PrimaryShopHandler shopData;
+    internal static Public_Data instance;
     internal GameData Data;
 
     internal bool Save()
@@ -60,19 +60,6 @@ public class Public_Data : MonoBehaviour
                 else 
                 {
                     GameData _GData = JsonUtility.FromJson<GameData>(_Data);
-                    if (_GData.purchasedAnimals.Count > 0){
-                        for (int ind = 0; ind < _GData.purchasedAnimals.Count;ind++)
-                        {
-                            if (shopData == null || shopData.purchasableOptions.Count < ind || shopData.purchasableOptions[ind] == null) continue;
-                            AnimalsSO animal = shopData.purchasableOptions[ind];
-                            int count = _GData.purchasedAnimals[ind];
-                            for (int _=0; _<count; _++)
-                            {
-                                GameObject cloned = Instantiate(animalPrefab);
-                                cloned.GetComponent<AnimalBehaivor>().animalSO = animal;
-                            }
-                        }
-                    }
                     for (int i=0;i<_GData.Resources.Count;i++)
                     {
                         if (_GData.Resources[i].ReferencedSprite < 0)
@@ -82,6 +69,18 @@ public class Public_Data : MonoBehaviour
                         if (_GData.Resources[i].ResourceNameID < 0)
                         {
                             _GData.Resources[i].ResourceNameID = 0;
+                        }
+                    }
+                    if (_GData.purchasedAnimals.Count > 0){
+                        for (int ind = 0; ind < _GData.purchasedAnimals.Count;ind++)
+                        {
+                            if (shopData == null || shopData.purchasableOptions.Count < ind || shopData.purchasableOptions[ind] == null) continue;
+                            AnimalsSO animal = shopData.purchasableOptions[ind];
+                            int count = _GData.purchasedAnimals[ind];
+                            for (int _=0; _<count; _++)
+                            {
+                                AnimalsManager.Instance.AddCellInstance(animal);
+                            }
                         }
                     }
                     Newdata = _GData;
@@ -98,8 +97,8 @@ public class Public_Data : MonoBehaviour
     private void Awake()
     {
         if (instance != null) Destroy(gameObject);
-        if (shopData == null) shopData = FindAnyObjectByType<PrimaryShopHandler>();
         instance = this;
+        shopData = PrimaryShopHandler.instance;
         SecurePlayerPrefs.Init();
         Data = Load();
         DontDestroyOnLoad(gameObject);   
@@ -117,15 +116,15 @@ public class Public_Data : MonoBehaviour
             }
         }
     }
-    internal void ChangeGain(int resourceID,double ammount)
+    internal void SetGain(int resourceID,double ammount)
     {
         if (resourceID >= 0 && Data != null && Data.Resources != null){
             if (resourceID < Data.Resources.Count && Data.Resources[resourceID] != null) { // failsafe to not break it.
-                Data.Resources[resourceID].Gain += ammount; 
+                Data.Resources[resourceID].Gain = ammount; 
             }
             else if (baseResources.Count > resourceID){
                 Resource newres =  new(baseResources[resourceID].ResourceNameID);
-                newres.Gain += ammount;
+                newres.Gain = ammount;
                 Data.Resources.Add(newres);
             }
         }
@@ -142,14 +141,11 @@ public class Public_Data : MonoBehaviour
 public class GameData
 {
     [SerializeField]    internal bool TutorialCompleted=false;
-    [SerializeField]    internal List<Resource> Resources;
+    [SerializeField]    internal List<Resource> Resources = new();
     [SerializeField]    internal List<int> purchasedAnimals = new();
     [SerializeField]    internal int Unlocked = 0;
-    public GameData(){
-        Resources = new();
-    }
-    public GameData(int firstresource){
-        Resources = new();
+    public GameData(int firstresource)
+    {
         Resources.Add(new Resource(firstresource));
     }
 }

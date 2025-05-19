@@ -76,7 +76,8 @@ public class ResourceViewHandler : MonoBehaviour
         _rounderer = new();
         _currentResViewers = new();
         _allAvalResLastID = 0;
-        _lastResIDShowed = -1;   
+        _lastResIDShowed = -1;
+        _Data = Public_Data.instance; 
         _allAvalResLastID = _Data.Data.Resources.Count;
     }
 
