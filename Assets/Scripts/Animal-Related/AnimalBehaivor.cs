@@ -21,10 +21,6 @@ public class AnimalBehaivor : MonoBehaviour
     int _currentPhase; // -1: dead, 0: standing / movement finished, 1:  movement
 
     float _phaseTick;
-    private Public_Data moneyStorage;
-    private float _gainCooldown;
-    private int _resourceType;
-    private float _resourceGain;
     float cd;
 
     private Vector2 GetRandomPosVector(Vector2 min, Vector2 max){
@@ -60,17 +56,6 @@ public class AnimalBehaivor : MonoBehaviour
             spriteRenderer.sprite = animalSO.BaseSprite;
         }
         // animal gain set-up
-        if (animalSO.GainAmmount > 0){
-            _gainCooldown = animalSO.GainDelay;
-            _resourceGain = animalSO.GainAmmount;
-            _resourceType = animalSO.ResourceID;
-            cd = _gainCooldown;
-            if (moneyStorage == null){
-                moneyStorage = FindObjectOfType<Public_Data>();
-                if (moneyStorage == null) Destroy ( gameObject);
-            }
-            moneyStorage.ChangeGain(_resourceType,_resourceGain/_gainCooldown);
-        }
     }
     private void RotateToTarget(Vector2 target){
         Vector2 vectorToTarget = target - (Vector2)transform.position;
@@ -117,16 +102,6 @@ public class AnimalBehaivor : MonoBehaviour
             }
         } 
         else { // plant based animal.
-        }
-        cd -= Time.deltaTime;
-        if (cd <= 0){
-            cd = _gainCooldown;
-            moneyStorage.ChangeMoney(_resourceType,_resourceGain);
-        }
-    }
-    void OnDestroy(){
-        if (_resourceGain>0){
-            moneyStorage.ChangeGain(_resourceType,-_resourceGain/_gainCooldown);
         }
     }
 }

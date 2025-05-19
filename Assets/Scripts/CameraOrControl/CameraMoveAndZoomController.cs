@@ -59,7 +59,7 @@ public class CameraMoveAndZoomController : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject()){
             PointerEventData pointerEventData = new PointerEventData(EventSystem.current); 
             pointerEventData.position = Input.mousePosition; 
-            GraphicRaycaster gr = FindObjectOfType<Canvas>().GetComponent<GraphicRaycaster>(); 
+            GraphicRaycaster gr = FindFirstObjectByType<Canvas>().GetComponent<GraphicRaycaster>(); 
             List<RaycastResult> results = new List<RaycastResult>(); 
             gr.Raycast(pointerEventData, results); 
             if (results.Count != 0 ) 
