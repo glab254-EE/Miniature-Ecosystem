@@ -5,6 +5,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Unity.VisualScripting;
 using Unity.Mathematics;
+using System.Threading.Tasks;
 public class Public_Data : MonoBehaviour
 {
     [field:SerializeField] internal List<Resource> baseResources; // idk where to place it, so il do it here
@@ -15,19 +16,19 @@ public class Public_Data : MonoBehaviour
     private PrimaryShopHandler shopData;
     internal static Public_Data instance;
     internal GameData Data;
-
-    internal bool Save()
+    float timebeforesave = 10;
+    internal async Task<bool> Save()
     {
         bool succseded = false;
         try
         {
-            GameData cloned = Data;
             for (int ind=0;ind<Data.Resources.Count;ind++)
             {
                 double curr = math.round(Data.Resources[ind].Current*10)/10;
                 Data.Resources[ind].Current = curr;
             }
-            string _DataString = JsonUtility.ToJson(cloned);
+            await Task.Delay(5);
+            string _DataString = JsonUtility.ToJson(Data);
             Debug.Log(_DataString);
             if (_DataString != null && _DataString != "null"){
                 SecurePlayerPrefs.SetString("Game_Data",_DataString);
@@ -42,7 +43,7 @@ public class Public_Data : MonoBehaviour
         }
         return succseded;
     }
-    internal GameData Load()
+    internal async Task<GameData> Load()
     {
         GameData Newdata = new(baseResources[0].ResourceNameID);
         try
@@ -71,6 +72,7 @@ public class Public_Data : MonoBehaviour
                             _GData.Resources[i].ResourceNameID = 0;
                         }
                     }
+                    await Task.Delay(50);
                     if (_GData.purchasedAnimals.Count > 0){
                         for (int ind = 0; ind < _GData.purchasedAnimals.Count;ind++)
                         {
@@ -94,14 +96,16 @@ public class Public_Data : MonoBehaviour
         }
         return Newdata;
     }
-    private void Awake()
+    private async Task Awake()
     {
         if (instance != null) Destroy(gameObject);
         instance = this;
+        DontDestroyOnLoad(gameObject);
+        await Task.Delay(25);
         shopData = PrimaryShopHandler.instance;
         SecurePlayerPrefs.Init();
-        Data = Load();
-        DontDestroyOnLoad(gameObject);   
+        Task<GameData> ld = Load();
+        Data = await ld;
     }
     internal void ChangeMoney(int resourceID,double ammount)
     { 
@@ -129,9 +133,26 @@ public class Public_Data : MonoBehaviour
             }
         }
     }
-    void OnApplicationQuit()
+    async Task Update()
     {
-        bool saved = Save();
+        if (timebeforesave <= 0)
+        {
+            timebeforesave = 10;
+            Debug.Log("Saving...");
+            Task<bool> st = Save();
+            bool saved = await st;
+            if (!saved) Debug.LogWarning("Failed to save.");
+            else Debug.Log("Saved.");
+        }
+        else
+        {
+            timebeforesave -= Time.deltaTime;
+        }
+    }
+    async Task OnApplicationQuit()
+    {
+        Task<bool> st = Save();
+        bool saved = await st;
         if (!saved) Debug.LogWarning("Something went wrong while saving data.");
         else Debug.Log("Saved.");
     }

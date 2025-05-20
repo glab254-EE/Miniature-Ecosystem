@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
 
@@ -71,20 +72,23 @@ public class ResourceViewHandler : MonoBehaviour
             viewer._resOtherText = string.Format("{0} ед.\n{1} в сек.",_rounderer.ToRoundedString(viewer.referencedres.Current),_rounderer.ToRoundedString(viewer.referencedres.Gain));
         }
     }
-    void Start()
+    bool ready = false;
+    async Task Start()
     {
         _rounderer = new();
         _currentResViewers = new();
         _allAvalResLastID = 0;
         _lastResIDShowed = -1;
-        _Data = Public_Data.instance; 
+        await Task.Delay(15);
+        ready = true;
+        _Data = Public_Data.instance;
         _allAvalResLastID = _Data.Data.Resources.Count;
     }
 
     void Update()
     {
+        if (!ready || _Data.Data == null) return;
         _allAvalResLastID = _Data.Data.Resources.Count;
         UpdateViewers();
-
     }
 }

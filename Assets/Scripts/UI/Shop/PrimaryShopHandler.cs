@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +9,6 @@ public class PrimaryShopHandler : MonoBehaviour
     [SerializeField] private Transform optionsParent;
     [SerializeField] private GameObject optionTemplate;
     [SerializeField] private GameObject animalTemplate;
-    [SerializeField]  private List<Button> AmmountButtons;
-    [SerializeField]  private List<int> AmmountOptions;
     [SerializeField] internal List<AnimalsSO> purchasableOptions; // changed to internal for letting data access it.
     private Public_Data globalData;
     internal static PrimaryShopHandler instance;
@@ -54,7 +53,7 @@ public class PrimaryShopHandler : MonoBehaviour
         if (globalData.Data.Resources.Count > neededresID && globalData.Data.Resources[neededresID].Current > animal.AnimalResourceCost*_currentbuyammount){
             if (lastPurchasedAnimal < id){
                 lastPurchasedAnimal=id;
-                globalData.Data.Unlocked++;
+                globalData.Data.Unlocked=id+1;
             }
             globalData.Data.Resources[neededresID].Current -= animal.AnimalResourceCost*_currentbuyammount;
             for (int i =0; i < _currentbuyammount; i++){
@@ -123,7 +122,8 @@ public class PrimaryShopHandler : MonoBehaviour
             }
         }
     }
-    void Start()
+    bool canUpdate = false;
+    async Task Start()
     {
         if (instance != null) Destroy(gameObject);
         instance = this;
@@ -131,23 +131,14 @@ public class PrimaryShopHandler : MonoBehaviour
         globalData = Public_Data.instance;
         visibleOptions = new();
         purchaseAmmountSelect = new();
-        for (int i=0; i< AmmountButtons.Count; i++){
-            purchaseAmmountSelect.Add(AmmountButtons[i],AmmountOptions[i]);
-        }
+        await Task.Delay(15);
+        canUpdate = true;
         unlockedlastanimal = globalData.Data.Unlocked;
         RefreshAvailable();
-        foreach (KeyValuePair<Button,int> valuePair in purchaseAmmountSelect){
-            valuePair.Key.onClick.AddListener(()=>{
-                if (currentBuyingAmmount != valuePair.Value){
-                    valuePair.Key.Select();
-                    currentBuyingAmmount = valuePair.Value;
-                }
-            });
-        }
     }
-
-    void LateUpdate()
+    void Update()
     {
+        if (!canUpdate || globalData.Data == null) return;
         int newUnlock = globalData.Data.Unlocked;    
         if (newUnlock  > unlockedlastanimal){
             RefreshAvailable();

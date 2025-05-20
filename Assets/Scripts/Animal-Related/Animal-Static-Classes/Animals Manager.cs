@@ -39,7 +39,7 @@ public class AnimalsManager : MonoBehaviour
         {
             if (cellCount.ContainsKey(cell))
             {
-                if (cellCount[cell] < AnimalCountLimit)
+                if (cellCount[cell] <= AnimalCountLimit)
                 {
                     AddToWorld(cell);
                 }
@@ -61,10 +61,9 @@ public class AnimalsManager : MonoBehaviour
                 }
             }
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            
-            throw;
+            Debug.LogWarning("Animals manager failed to instance animal. " + e);
         }
         
     }
@@ -83,6 +82,7 @@ public class AnimalsManager : MonoBehaviour
     {
         for (int id = 0; id < GainPerSecond.Count; id++)
         {
+            data.SetGain(id, GainPerSecond[id]);
             data.ChangeMoney(id, GainPerSecond[id]);
         }
     }
@@ -95,7 +95,7 @@ public class AnimalsManager : MonoBehaviour
         else
         {
             Tick = 0;
-
+            GainSecond();
         }
     }
 }
