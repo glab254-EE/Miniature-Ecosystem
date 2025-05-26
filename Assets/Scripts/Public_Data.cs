@@ -48,8 +48,7 @@ public class Public_Data : MonoBehaviour
         GameData Newdata = new(baseResources[0].ResourceNameID);
         try
         {
-            
-            if (SecurePlayerPrefs.HasKey("Game_Data")){
+            if (!Application.isEditor&&SecurePlayerPrefs.HasKey("Game_Data")){
                 string _Data = SecurePlayerPrefs.GetString("Game_Data");
                 Debug.Log(_Data);
                 if (_Data == null || _Data == "null" || _Data.Contains("?"))
@@ -96,13 +95,22 @@ public class Public_Data : MonoBehaviour
         }
         return Newdata;
     }
-    private async Task Awake()
+    private async Awaitable Awake()
     {
         if (instance != null) Destroy(gameObject);
         instance = this;
         DontDestroyOnLoad(gameObject);
-        await Task.Delay(25);
+        await Awaitable.WaitForSecondsAsync(.1f);
+
         shopData = PrimaryShopHandler.instance;
+        if (shopData == null)
+        {
+            do
+            {
+                shopData = PrimaryShopHandler.instance;
+                await Awaitable.WaitForSecondsAsync(.1f);
+            } while (shopData == null);
+        }
         SecurePlayerPrefs.Init();
         Task<GameData> ld = Load();
         Data = await ld;

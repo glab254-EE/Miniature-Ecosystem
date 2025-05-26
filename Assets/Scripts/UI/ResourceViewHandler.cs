@@ -73,15 +73,22 @@ public class ResourceViewHandler : MonoBehaviour
         }
     }
     bool ready = false;
-    async Task Start()
+    async Awaitable Start()
     {
         _rounderer = new();
         _currentResViewers = new();
         _allAvalResLastID = 0;
         _lastResIDShowed = -1;
-        await Task.Delay(15);
         ready = true;
         _Data = Public_Data.instance;
+        if (_Data.Data == null)
+        {
+            do
+            {
+                _Data = Public_Data.instance;
+                await Awaitable.WaitForSecondsAsync(.1f);
+            } while (_Data.Data == null);
+        }
         _allAvalResLastID = _Data.Data.Resources.Count;
     }
 

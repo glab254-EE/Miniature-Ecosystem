@@ -123,7 +123,7 @@ public class PrimaryShopHandler : MonoBehaviour
         }
     }
     bool canUpdate = false;
-    async Task Start()
+    async Awaitable Start()
     {
         if (instance != null) Destroy(gameObject);
         instance = this;
@@ -131,8 +131,15 @@ public class PrimaryShopHandler : MonoBehaviour
         globalData = Public_Data.instance;
         visibleOptions = new();
         purchaseAmmountSelect = new();
-        await Task.Delay(15);
         canUpdate = true;
+        if (globalData.Data == null)
+        {
+            do
+            {
+                globalData = Public_Data.instance;
+                await Awaitable.WaitForSecondsAsync(.1f);
+            } while (globalData.Data == null);
+        }
         unlockedlastanimal = globalData.Data.Unlocked;
         RefreshAvailable();
     }

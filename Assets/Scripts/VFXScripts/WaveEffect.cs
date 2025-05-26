@@ -10,7 +10,7 @@ public class WaveEffect : MonoBehaviour
     [SerializeField] private string waveEffectName = "_STime";
     [SerializeField] private float waveEffectDuration = 0.25f;
     [SerializeField] private float waveEffectPositionZ = -11;
-    async Task AddEffect(Vector3 Position)
+    async Awaitable AddEffect(Vector3 Position)
     {
         if (waveEffect == null || waveEffectDuration == default || waveEffectName == "")
         {
@@ -26,7 +26,7 @@ public class WaveEffect : MonoBehaviour
             float dt = Time.deltaTime;
             stimer += dt;
             material.SetFloat(waveEffectName, stimer*multiply);
-            await Task.Delay(Mathf.RoundToInt(dt*1000));
+            await Awaitable.WaitForSecondsAsync(dt);
         }
         Destroy(cloned);
     }
