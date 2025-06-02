@@ -5,29 +5,30 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Unity.VisualScripting;
 using Unity.Mathematics;
+using System.Threading.Tasks;
 public class Public_Data : MonoBehaviour
 {
     [field:SerializeField] internal List<Resource> baseResources; // idk where to place it, so il do it here
     [field:SerializeField] internal List<Sprite> baseSprites; // idk where to place it, so il do it here
     [field:SerializeField] internal List<string> resourceNames;
-    [SerializeField] private PrimaryShopHandler shopData;
     [SerializeField] private GameObject animalPrefab;
     [SerializeField] private Transform animalsParent;
-    internal Public_Data instance;
+    private PrimaryShopHandler shopData;
+    internal static Public_Data instance;
     internal GameData Data;
-
-    internal bool Save()
+    float timebeforesave = 10;
+    internal async Task<bool> Save()
     {
         bool succseded = false;
         try
         {
-            GameData cloned = Data;
             for (int ind=0;ind<Data.Resources.Count;ind++)
             {
                 double curr = math.round(Data.Resources[ind].Current*10)/10;
                 Data.Resources[ind].Current = curr;
             }
-            string _DataString = JsonUtility.ToJson(cloned);
+            await Task.Delay(5);
+            string _DataString = JsonUtility.ToJson(Data);
             Debug.Log(_DataString);
             if (_DataString != null && _DataString != "null"){
                 SecurePlayerPrefs.SetString("Game_Data",_DataString);
@@ -42,13 +43,19 @@ public class Public_Data : MonoBehaviour
         }
         return succseded;
     }
-    internal GameData Load()
+    internal async Task<GameData> Load()
     {
         GameData Newdata = new(baseResources[0].ResourceNameID);
         try
         {
-            
-            if (SecurePlayerPrefs.HasKey("Game_Data")){
+            Debug.Log("Loading init.");
+            if (SecurePlayerPrefs.HasKey("Game_Data"))
+            {
+                if (Application.isEditor)
+                {
+                    Debug.Log("Skipped due of being editor.");
+                    return Newdata;
+                }
                 string _Data = SecurePlayerPrefs.GetString("Game_Data");
                 Debug.Log(_Data);
                 if (_Data == null || _Data == "null" || _Data.Contains("?"))
@@ -56,24 +63,11 @@ public class Public_Data : MonoBehaviour
                     SecurePlayerPrefs.DeleteKey("Game_Data");
                     Debug.LogError("Null was not expected.");
                     return new GameData(baseResources[0].ResourceNameID);
-                } 
-                else 
+                }
+                else
                 {
                     GameData _GData = JsonUtility.FromJson<GameData>(_Data);
-                    if (_GData.purchasedAnimals.Count > 0){
-                        for (int ind = 0; ind < _GData.purchasedAnimals.Count;ind++)
-                        {
-                            if (shopData == null || shopData.purchasableOptions.Count < ind || shopData.purchasableOptions[ind] == null) continue;
-                            AnimalsSO animal = shopData.purchasableOptions[ind];
-                            int count = _GData.purchasedAnimals[ind];
-                            for (int _=0; _<count; _++)
-                            {
-                                GameObject cloned = Instantiate(animalPrefab);
-                                cloned.GetComponent<AnimalBehaivor>().animalSO = animal;
-                            }
-                        }
-                    }
-                    for (int i=0;i<_GData.Resources.Count;i++)
+                    for (int i = 0; i < _GData.Resources.Count; i++)
                     {
                         if (_GData.Resources[i].ReferencedSprite < 0)
                         {
@@ -84,7 +78,22 @@ public class Public_Data : MonoBehaviour
                             _GData.Resources[i].ResourceNameID = 0;
                         }
                     }
+                    await Task.Delay(50);
+                    if (_GData.purchasedAnimals.Count > 0)
+                    {
+                        for (int ind = 0; ind < _GData.purchasedAnimals.Count; ind++)
+                        {
+                            if (shopData == null || shopData.purchasableOptions.Count < ind || shopData.purchasableOptions[ind] == null) continue;
+                            AnimalsSO animal = shopData.purchasableOptions[ind];
+                            int count = _GData.purchasedAnimals[ind];
+                            for (int _ = 0; _ < count; _++)
+                            {
+                                AnimalsManager.Instance.AddCellInstance(animal);
+                            }
+                        }
+                    }
                     Newdata = _GData;
+                    Debug.Log("Loading Successfull.");
                 }
 
             }
@@ -95,14 +104,25 @@ public class Public_Data : MonoBehaviour
         }
         return Newdata;
     }
-    private void Awake()
+    private async Awaitable Awake()
     {
         if (instance != null) Destroy(gameObject);
-        if (shopData == null) shopData = FindAnyObjectByType<PrimaryShopHandler>();
         instance = this;
+        DontDestroyOnLoad(gameObject);
+        await Awaitable.WaitForSecondsAsync(.1f);
+
+        shopData = PrimaryShopHandler.instance;
+        if (shopData == null)
+        {
+            do
+            {
+                shopData = PrimaryShopHandler.instance;
+                await Awaitable.WaitForSecondsAsync(.1f);
+            } while (shopData == null);
+        }
         SecurePlayerPrefs.Init();
-        Data = Load();
-        DontDestroyOnLoad(gameObject);   
+        Task<GameData> ld = Load();
+        Data = await ld;
     }
     internal void ChangeMoney(int resourceID,double ammount)
     { 
@@ -117,22 +137,39 @@ public class Public_Data : MonoBehaviour
             }
         }
     }
-    internal void ChangeGain(int resourceID,double ammount)
+    internal void SetGain(int resourceID,double ammount)
     {
         if (resourceID >= 0 && Data != null && Data.Resources != null){
             if (resourceID < Data.Resources.Count && Data.Resources[resourceID] != null) { // failsafe to not break it.
-                Data.Resources[resourceID].Gain += ammount; 
+                Data.Resources[resourceID].Gain = ammount; 
             }
             else if (baseResources.Count > resourceID){
                 Resource newres =  new(baseResources[resourceID].ResourceNameID);
-                newres.Gain += ammount;
+                newres.Gain = ammount;
                 Data.Resources.Add(newres);
             }
         }
     }
-    void OnApplicationQuit()
+    async Awaitable Update()
     {
-        bool saved = Save();
+        if (timebeforesave <= 0)
+        {
+            timebeforesave = 10;
+            Debug.Log("Saving...");
+            Task<bool> st = Save();
+            bool saved = await st;
+            if (!saved) Debug.LogWarning("Failed to save.");
+            else Debug.Log("Saved.");
+        }
+        else
+        {
+            timebeforesave -= Time.deltaTime;
+        }
+    }
+    async Awaitable OnApplicationQuit()
+    {
+        Task<bool> st = Save();
+        bool saved = await st;
         if (!saved) Debug.LogWarning("Something went wrong while saving data.");
         else Debug.Log("Saved.");
     }
@@ -142,14 +179,11 @@ public class Public_Data : MonoBehaviour
 public class GameData
 {
     [SerializeField]    internal bool TutorialCompleted=false;
-    [SerializeField]    internal List<Resource> Resources;
+    [SerializeField]    internal List<Resource> Resources = new();
     [SerializeField]    internal List<int> purchasedAnimals = new();
     [SerializeField]    internal int Unlocked = 0;
-    public GameData(){
-        Resources = new();
-    }
-    public GameData(int firstresource){
-        Resources = new();
+    public GameData(int firstresource)
+    {
         Resources.Add(new Resource(firstresource));
     }
 }

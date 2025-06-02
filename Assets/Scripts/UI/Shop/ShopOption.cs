@@ -26,6 +26,7 @@ public class ShopOption : MonoBehaviour
             animal_Name.text = Animal.animalName;
             animal_Cost.text = (Animal.AnimalResourceCost * Multiplier).ToString();
         }
+        purchaseButton_Text.text = "Buy";
     }
     void Update()
     {
@@ -33,6 +34,5 @@ public class ShopOption : MonoBehaviour
         animal_Gain.text = $"+{_rounderer.ToRoundedString(Animal.GainAmmount/Animal.GainDelay)}/ск.";
         animal_CostedResourcePreview.sprite = ResourceneededSprite;
         animal_GainResourcePreview.sprite = ResourcegainSprite; 
-        purchaseButton_Text.text = $"Buy x{Multiplier}";
     }
 }

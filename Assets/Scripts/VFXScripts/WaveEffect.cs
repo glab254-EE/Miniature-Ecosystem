@@ -9,8 +9,9 @@ public class WaveEffect : MonoBehaviour
     [SerializeField] private GameObject waveEffect;
     [SerializeField] private string waveEffectName = "_STime";
     [SerializeField] private float waveEffectDuration = 0.25f;
-    [SerializeField] private float waveEffectPositionZ = -11;
-    async Task AddEffect(Vector3 Position)
+    [SerializeField] private float waveEffectPositionZ = -1;
+    [SerializeField] private float waveEffctDifference = -.1f;
+    async Awaitable AddEffect(Vector3 Position)
     {
         if (waveEffect == null || waveEffectDuration == default || waveEffectName == "")
         {
@@ -24,9 +25,9 @@ public class WaveEffect : MonoBehaviour
         while (stimer < waveEffectDuration)
         {
             float dt = Time.deltaTime;
+            await Awaitable.WaitForSecondsAsync(dt);
             stimer += dt;
-            material.SetFloat(waveEffectName, stimer*multiply);
-            await Task.Delay(Mathf.RoundToInt(dt*1000));
+            material.SetFloat(waveEffectName, stimer*multiply-waveEffctDifference);
         }
         Destroy(cloned);
     }

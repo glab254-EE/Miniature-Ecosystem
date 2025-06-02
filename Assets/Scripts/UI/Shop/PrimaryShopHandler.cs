@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +9,9 @@ public class PrimaryShopHandler : MonoBehaviour
     [SerializeField] private Transform optionsParent;
     [SerializeField] private GameObject optionTemplate;
     [SerializeField] private GameObject animalTemplate;
-    [SerializeField]  private List<Button> AmmountButtons;
-    [SerializeField]  private List<int> AmmountOptions;
     [SerializeField] internal List<AnimalsSO> purchasableOptions; // changed to internal for letting data access it.
-    [SerializeField] private Public_Data globalData;
+    private Public_Data globalData;
+    internal static PrimaryShopHandler instance;
     private List<GameObject> visibleOptions;
     private Dictionary<Button,int> purchaseAmmountSelect;
     int currentBuyingAmmount = 1;
@@ -40,32 +40,20 @@ public class PrimaryShopHandler : MonoBehaviour
     }
     private void OnButtonClicked(AnimalsSO animal, int id){
         int neededresID = animal.AnimalResourceSubstractID;
-        int _currentbuyammount = 1;
-        if (currentBuyingAmmount == -1){
-            _currentbuyammount = CalculateMaxPurchase(animal.AnimalResourceCost,globalData.Data.Resources[neededresID].Current);
-        }
-        else if (currentBuyingAmmount > 1){
-            _currentbuyammount = CalculateMaxPurchase(animal.AnimalResourceCost,globalData.Data.Resources[neededresID].Current,currentBuyingAmmount);
-        } else {
-            _currentbuyammount = 1;
-        }
-
-        if (globalData.Data.Resources.Count > neededresID && globalData.Data.Resources[neededresID].Current > animal.AnimalResourceCost*_currentbuyammount){
+        if (globalData.Data.Resources.Count > neededresID && globalData.Data.Resources[neededresID].Current >= animal.AnimalResourceCost){
             if (lastPurchasedAnimal < id){
                 lastPurchasedAnimal=id;
-                globalData.Data.Unlocked++;
+                globalData.Data.Unlocked=id+1;
             }
-            globalData.Data.Resources[neededresID].Current -= animal.AnimalResourceCost*_currentbuyammount;
-            for (int i =0; i < _currentbuyammount; i++){
-                GameObject cloned = Instantiate(animalTemplate);
-                cloned.GetComponent<AnimalBehaivor>().animalSO = animal;
-                if (globalData.Data.purchasedAnimals.Count <= id)
-                {
-                    globalData.Data.purchasedAnimals.Add(1);
-                } else 
-                {
-                    globalData.Data.purchasedAnimals[id] += 1;
-                }
+            globalData.Data.Resources[neededresID].Current -= animal.AnimalResourceCost;
+            AnimalsManager.Instance.AddCellInstance(animal);
+            if (globalData.Data.purchasedAnimals.Count <= id)
+            {
+                globalData.Data.purchasedAnimals.Add(1);
+            }
+            else
+            {
+                globalData.Data.purchasedAnimals[id] += 1;
             }
         }
     }
@@ -75,9 +63,9 @@ public class PrimaryShopHandler : MonoBehaviour
             option.Animal = animal;
             newGO.name = animal.animalName;
             visibleOptions.Add(newGO);
-            if (globalData.baseResources[animal.ResourceID].ReferencedSprite != -1){
+            if (globalData.baseResources[animal.ResourceID].ReferencedSprite >= 0){
                 Sprite sprite = globalData.baseSprites[globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite];
-                option.ResourceneededSprite = sprite;
+                option.ResourcegainSprite = sprite;
             }
             if (globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite != -1){
                 Sprite sprite = globalData.baseSprites[globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite];
@@ -122,27 +110,31 @@ public class PrimaryShopHandler : MonoBehaviour
             }
         }
     }
-    void Start()
+    bool canUpdate = false;
+    async Awaitable Start()
     {
+        if (instance != null) Destroy(gameObject);
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        globalData = Public_Data.instance;
         visibleOptions = new();
         purchaseAmmountSelect = new();
-        for (int i=0; i< AmmountButtons.Count; i++){
-            purchaseAmmountSelect.Add(AmmountButtons[i],AmmountOptions[i]);
+        if (globalData.Data == null)
+        {
+            do
+            {
+                globalData = Public_Data.instance;
+                await Awaitable.WaitForSecondsAsync(.1f);
+            } while (globalData.Data == null);
         }
+        canUpdate = true;
         unlockedlastanimal = globalData.Data.Unlocked;
         RefreshAvailable();
-        foreach (KeyValuePair<Button,int> valuePair in purchaseAmmountSelect){
-            valuePair.Key.onClick.AddListener(()=>{
-                if (currentBuyingAmmount != valuePair.Value){
-                    valuePair.Key.Select();
-                    currentBuyingAmmount = valuePair.Value;
-                }
-            });
-        }
+        lastPurchasedAnimal = unlockedlastanimal - 1;
     }
-
-    void LateUpdate()
+    void Update()
     {
+        if (!canUpdate || globalData.Data == null) return;
         int newUnlock = globalData.Data.Unlocked;    
         if (newUnlock  > unlockedlastanimal){
             RefreshAvailable();
