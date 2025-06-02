@@ -28,4 +28,5 @@ MonoBehaviour:
   <AnimalResourceCost>k__BackingField: 300
   <AnimalResourceSubstractID>k__BackingField: 0
   <MinAnimalSize>k__BackingField: 0.25
-  <MaxAnimalSize>k__BackingField: 0.5
+  <MaxAnimalSize>k__BackingField: 0.4
+  AnimalID: cell2

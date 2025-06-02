@@ -8,7 +8,7 @@ public class AnimalsManager : MonoBehaviour
     [SerializeField] private GameObject AnimalsPrefab;
     [SerializeField] private Transform AnimalsParent;
     [SerializeField] private int AnimalCountLimit = 5;
-    private Dictionary<AnimalsSO, int> cellCount = new();
+    private Dictionary<string, int> cellCount = new();
     private List<double> GainPerSecond = new();
     private Public_Data data;
     private float Tick;
@@ -19,13 +19,13 @@ public class AnimalsManager : MonoBehaviour
         if (cloned.TryGetComponent<AnimalBehaivor>(out AnimalBehaivor behaivor))
         {
             behaivor.animalSO = cell;
-            if (cellCount.ContainsKey(cell))
+            if (cellCount.ContainsKey(cell.AnimalID))
             {
-                cellCount[cell] += 1;
+                cellCount[cell.AnimalID] += 1;
             }
             else
             {
-                cellCount.Add(cell, 1);
+                cellCount.Add(cell.AnimalID, 1);
             }
         }
         else Destroy(cloned);
@@ -34,20 +34,20 @@ public class AnimalsManager : MonoBehaviour
     internal void AddCellInstance(AnimalsSO cell)
     {
 
-        if (cell == null) return;
+        if (cell == null)
+        {
+            Debug.LogWarning("No cell inputed.");
+            return;
+        }
         try
         {
-            if (cellCount.ContainsKey(cell))
+            if (!cellCount.ContainsKey(cell.AnimalID) || cellCount[cell.AnimalID] <= AnimalCountLimit)
             {
-                if (cellCount[cell] <= AnimalCountLimit)
-                {
-                    AddToWorld(cell);
-                }
-                cellCount[cell] += 1;
+                AddToWorld(cell);
             }
             else
             {
-                cellCount.Add(cell, 1);
+                cellCount[cell.AnimalID] += 1;
             }
             if (cell.GainAmmount > 0 && cell.GainDelay > 0)
             {

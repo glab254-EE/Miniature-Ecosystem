@@ -40,32 +40,20 @@ public class PrimaryShopHandler : MonoBehaviour
     }
     private void OnButtonClicked(AnimalsSO animal, int id){
         int neededresID = animal.AnimalResourceSubstractID;
-        int _currentbuyammount = 1;
-        if (currentBuyingAmmount == -1){
-            _currentbuyammount = CalculateMaxPurchase(animal.AnimalResourceCost,globalData.Data.Resources[neededresID].Current);
-        }
-        else if (currentBuyingAmmount > 1){
-            _currentbuyammount = CalculateMaxPurchase(animal.AnimalResourceCost,globalData.Data.Resources[neededresID].Current,currentBuyingAmmount);
-        } else {
-            _currentbuyammount = 1;
-        }
-
-        if (globalData.Data.Resources.Count > neededresID && globalData.Data.Resources[neededresID].Current > animal.AnimalResourceCost*_currentbuyammount){
+        if (globalData.Data.Resources.Count > neededresID && globalData.Data.Resources[neededresID].Current >= animal.AnimalResourceCost){
             if (lastPurchasedAnimal < id){
                 lastPurchasedAnimal=id;
                 globalData.Data.Unlocked=id+1;
             }
-            globalData.Data.Resources[neededresID].Current -= animal.AnimalResourceCost*_currentbuyammount;
-            for (int i =0; i < _currentbuyammount; i++){
-                AnimalsManager.Instance.AddCellInstance(animal);
-                if (globalData.Data.purchasedAnimals.Count <= id)
-                {
-                    globalData.Data.purchasedAnimals.Add(1);
-                }
-                else
-                {
-                    globalData.Data.purchasedAnimals[id] += 1;
-                }
+            globalData.Data.Resources[neededresID].Current -= animal.AnimalResourceCost;
+            AnimalsManager.Instance.AddCellInstance(animal);
+            if (globalData.Data.purchasedAnimals.Count <= id)
+            {
+                globalData.Data.purchasedAnimals.Add(1);
+            }
+            else
+            {
+                globalData.Data.purchasedAnimals[id] += 1;
             }
         }
     }
@@ -75,9 +63,9 @@ public class PrimaryShopHandler : MonoBehaviour
             option.Animal = animal;
             newGO.name = animal.animalName;
             visibleOptions.Add(newGO);
-            if (globalData.baseResources[animal.ResourceID].ReferencedSprite != -1){
+            if (globalData.baseResources[animal.ResourceID].ReferencedSprite >= 0){
                 Sprite sprite = globalData.baseSprites[globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite];
-                option.ResourceneededSprite = sprite;
+                option.ResourcegainSprite = sprite;
             }
             if (globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite != -1){
                 Sprite sprite = globalData.baseSprites[globalData.baseResources[animal.AnimalResourceSubstractID].ReferencedSprite];
@@ -131,7 +119,6 @@ public class PrimaryShopHandler : MonoBehaviour
         globalData = Public_Data.instance;
         visibleOptions = new();
         purchaseAmmountSelect = new();
-        canUpdate = true;
         if (globalData.Data == null)
         {
             do
@@ -140,8 +127,10 @@ public class PrimaryShopHandler : MonoBehaviour
                 await Awaitable.WaitForSecondsAsync(.1f);
             } while (globalData.Data == null);
         }
+        canUpdate = true;
         unlockedlastanimal = globalData.Data.Unlocked;
         RefreshAvailable();
+        lastPurchasedAnimal = unlockedlastanimal - 1;
     }
     void Update()
     {

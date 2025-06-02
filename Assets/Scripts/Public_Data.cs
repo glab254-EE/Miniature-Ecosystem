@@ -48,7 +48,14 @@ public class Public_Data : MonoBehaviour
         GameData Newdata = new(baseResources[0].ResourceNameID);
         try
         {
-            if (!Application.isEditor&&SecurePlayerPrefs.HasKey("Game_Data")){
+            Debug.Log("Loading init.");
+            if (SecurePlayerPrefs.HasKey("Game_Data"))
+            {
+                if (Application.isEditor)
+                {
+                    Debug.Log("Skipped due of being editor.");
+                    return Newdata;
+                }
                 string _Data = SecurePlayerPrefs.GetString("Game_Data");
                 Debug.Log(_Data);
                 if (_Data == null || _Data == "null" || _Data.Contains("?"))
@@ -56,11 +63,11 @@ public class Public_Data : MonoBehaviour
                     SecurePlayerPrefs.DeleteKey("Game_Data");
                     Debug.LogError("Null was not expected.");
                     return new GameData(baseResources[0].ResourceNameID);
-                } 
-                else 
+                }
+                else
                 {
                     GameData _GData = JsonUtility.FromJson<GameData>(_Data);
-                    for (int i=0;i<_GData.Resources.Count;i++)
+                    for (int i = 0; i < _GData.Resources.Count; i++)
                     {
                         if (_GData.Resources[i].ReferencedSprite < 0)
                         {
@@ -72,19 +79,21 @@ public class Public_Data : MonoBehaviour
                         }
                     }
                     await Task.Delay(50);
-                    if (_GData.purchasedAnimals.Count > 0){
-                        for (int ind = 0; ind < _GData.purchasedAnimals.Count;ind++)
+                    if (_GData.purchasedAnimals.Count > 0)
+                    {
+                        for (int ind = 0; ind < _GData.purchasedAnimals.Count; ind++)
                         {
                             if (shopData == null || shopData.purchasableOptions.Count < ind || shopData.purchasableOptions[ind] == null) continue;
                             AnimalsSO animal = shopData.purchasableOptions[ind];
                             int count = _GData.purchasedAnimals[ind];
-                            for (int _=0; _<count; _++)
+                            for (int _ = 0; _ < count; _++)
                             {
                                 AnimalsManager.Instance.AddCellInstance(animal);
                             }
                         }
                     }
                     Newdata = _GData;
+                    Debug.Log("Loading Successfull.");
                 }
 
             }
@@ -141,7 +150,7 @@ public class Public_Data : MonoBehaviour
             }
         }
     }
-    async Task Update()
+    async Awaitable Update()
     {
         if (timebeforesave <= 0)
         {
@@ -157,7 +166,7 @@ public class Public_Data : MonoBehaviour
             timebeforesave -= Time.deltaTime;
         }
     }
-    async Task OnApplicationQuit()
+    async Awaitable OnApplicationQuit()
     {
         Task<bool> st = Save();
         bool saved = await st;
