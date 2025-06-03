@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -15,36 +16,47 @@ public class TutorialHandler : MonoBehaviour
     bool _tutorialCompleted;
     void Awake()
     {
+        dataReference = Public_Data.instance;
         _inAct = new();
         _slide = 0;
     }
     void OnSKIP()
     {
         gameObject.SetActive(false);
+        dataReference = Public_Data.instance;
         dataReference.Data.TutorialCompleted = true;   
         _inAct.Player.Fire.performed -= NextSlide;     
     }
-    void Start()
+    private void Start()
     {
+        dataReference = Public_Data.instance;
         if (dataReference == null)
         { // failsafe, idk how to trytofind any object
             Destroy(gameObject);
         }
         else
         {
-            _tutorialCompleted = dataReference.Data.TutorialCompleted;
+            if (dataReference.Data != null)
+            {
+                _tutorialCompleted = dataReference.Data.TutorialCompleted;
+            }
+            else
+            {
+                _tutorialCompleted = false;
+            }
         }
-        if (!_tutorialCompleted)
+
+        Debug.Log("Starting tutorial!");
+        if (_tutorialCompleted)
         {
-            _inAct.Player.Fire.performed += NextSlide;
-            _inAct.Player.Fire.Enable();
-            slides[_slide].SetActive(true);
-            if (skipbutton != null) skipbutton.onClick.AddListener(OnSKIP);
-        }
-        else
-        {
+            Debug.Log("Nvm, ending early!");
             gameObject.SetActive(false);
+            return;
         }
+        _inAct.Player.Fire.performed += NextSlide;
+        _inAct.Player.Fire.Enable();
+        slides[_slide].SetActive(true);
+        skipbutton.onClick.AddListener(OnSKIP);
     }
     private void OnDestroy(){
         _inAct.Player.Fire.performed -= NextSlide;
@@ -54,6 +66,7 @@ public class TutorialHandler : MonoBehaviour
             slides[_slide].SetActive(false);
             if (_slide + 1 >= slides.Count){
                 gameObject.SetActive(false);
+                dataReference = Public_Data.instance;
                 dataReference.Data.TutorialCompleted = true;
             }
             else 

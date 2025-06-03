@@ -42,9 +42,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "OpenSettings",
+                    "name": "OpenSettingsMenu",
                     "type": "Button",
-                    "id": "3c9a635d-a567-41c6-a3ef-f30a135d270a",
+                    "id": "08804600-a998-46e9-b56b-8165d5ad16e7",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -285,23 +285,23 @@
                 },
                 {
                     "name": "",
-                    "id": "edec7685-4b6c-46cb-87fa-af079535f2b7",
-                    "path": "<Gamepad>/start",
+                    "id": "4b2628cf-3798-48bf-9a45-358eafe9bb87",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "OpenSettings",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "OpenSettingsMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "801e7b34-4f91-4265-998e-941818e048a9",
-                    "path": "<Keyboard>/escape",
+                    "id": "b446419b-f3da-433e-b606-81f8df09ada1",
+                    "path": "<Gamepad>/select",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "OpenSettings",
+                    "groups": ";Gamepad",
+                    "action": "OpenSettingsMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
