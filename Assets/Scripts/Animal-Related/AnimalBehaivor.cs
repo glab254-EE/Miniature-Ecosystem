@@ -11,9 +11,12 @@ public class AnimalBehaivor : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] internal AnimalsSO animalSO;
-    [Header("Settings")]
+    [Header("Settings-Movement")]
     [SerializeField] private float randomSpeedDivider = 10f; // used for a bit of randomness of movement.
     [SerializeField] private float AnimationSpeed = 1f;
+    [Header("Settings-Animation")]
+    [SerializeField] private List<Sprite> AnimationSprites;
+    [SerializeField] private float AnimationStepTime = 0.25f;
     [SerializeField] private float AnimationSizeAdditionX = 1f;
     [SerializeField] private float AnimationSizeAdditionY = 1f;
     internal bool Dragged;
@@ -24,41 +27,78 @@ public class AnimalBehaivor : MonoBehaviour
 
     float _phaseTick;
     Vector2 _startingScaleOrSize;
+    float _animationBretheTick = 0f;
     float _animationTick = 0f;
+    int _currentSprite;
     bool _loweringAnimation = false;
-    private Vector2 GetRandomPosVector(Vector2 min, Vector2 max) {
+    private void AnimationNextSprite()
+    {
+        if (AnimationSprites.Count >= 2)
+        {
+            _currentSprite++;
+            if (_currentSprite >= AnimationSprites.Count)
+            {
+                _currentSprite = 0;
+            }
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sprite = AnimationSprites[_currentSprite];
+            }
+            _animationTick = AnimationStepTime;
+        } 
+    }
+    private Vector2 GetRandomPosVector(Vector2 min, Vector2 max)
+    {
 
         Vector2 output = min;
-        try {
+        try
+        {
             output = new Vector2(UnityEngine.Random.Range(min.x, max.x), UnityEngine.Random.Range(min.y, max.y)); // gets random vector
-        } catch (System.Exception) {
+        }
+        catch (System.Exception)
+        {
             Debug.Log("Could not get random vector for " + gameObject.name + ". Returning minimum.");
         }
         return output;
     }
-   
+
     void Start()
     {
-        if (animalSO.MinAnimalSize > 0 && animalSO.MaxAnimalSize > 0){
-            float newsize = UnityEngine.Random.Range(animalSO.MinAnimalSize,animalSO.MaxAnimalSize);
-            transform.localScale = new Vector3(newsize,newsize,newsize);
+        if (animalSO.MinAnimalSize > 0 && animalSO.MaxAnimalSize > 0)
+        {
+            float newsize = UnityEngine.Random.Range(animalSO.MinAnimalSize, animalSO.MaxAnimalSize);
+            transform.localScale = new Vector3(newsize, newsize, newsize);
         }
+        _animationTick = AnimationStepTime;
         _minMovementBounds = animalSO.MinMovementBounds;
         _maxMovementBounds = animalSO.MaxMovementBounds;
         _moving = false;
-        _phaseTick = 0; 
-        if (spriteRenderer == null){
+        _phaseTick = 0;
+        if (spriteRenderer == null)
+        {
             gameObject.TryGetComponent<SpriteRenderer>(out spriteRenderer);
         }
-        if (rb==null){
+        if (rb == null)
+        {
             gameObject.TryGetComponent<Rigidbody2D>(out rb);
-        }  
-        transform.position = GetRandomPosVector(_minMovementBounds,_maxMovementBounds);
+        }
+        transform.position = GetRandomPosVector(_minMovementBounds, _maxMovementBounds);
         _currentPhase = 0;
-        if (animalSO.BaseSprite != null) { 
+        if (animalSO.BaseSprite != null)
+        {
             spriteRenderer.sprite = animalSO.BaseSprite;
         }
+        if (animalSO.AnimationSprites != null)
+        {
+            AnimationSprites = animalSO.AnimationSprites;
+            if (AnimationSprites.Count >= 1)
+            {
+                spriteRenderer.sprite = animalSO.AnimationSprites[0];
+            }
+        }
         _startingScaleOrSize = new Vector2(transform.localScale.x, transform.localScale.y);
+        float _PosZ = UnityEngine.Random.Range(transform.position.z - 0.15f, transform.position.z + 0.15f);
+        transform.position = new Vector3(transform.position.x, transform.position.y, _PosZ);
     }
     private void RotateToTarget(Vector2 target){
         Vector2 vectorToTarget = target - (Vector2)transform.position;
@@ -92,7 +132,7 @@ public class AnimalBehaivor : MonoBehaviour
     }
     void Update()
     {
-        if (animalSO != null && animalSO.BType != BeingType.Plant && !Dragged)
+        if (animalSO != null )
         { // checks if being is NOT plant.
             if (_currentPhase == 0 && animalSO.MovementDelay >= 0)
             {
@@ -111,20 +151,22 @@ public class AnimalBehaivor : MonoBehaviour
                 StartCoroutine(RandomMovement());
             }
         }
-        else
-        { // plant based animal.
-        }
-        if (!_loweringAnimation && _animationTick < 1)
+        _animationTick -= Time.deltaTime;
+        if (_animationTick <= 0)
         {
-            _animationTick += Time.deltaTime * AnimationSpeed;
-            if (_animationTick >= 1) _loweringAnimation = true;
+            AnimationNextSprite();
         }
-        else if (_loweringAnimation && _animationTick > 0)
+        if (!_loweringAnimation && _animationBretheTick < 1)
         {
-            _animationTick -= Time.deltaTime * AnimationSpeed;
-            if (_animationTick <= 0) _loweringAnimation = false;
+            _animationBretheTick += Time.deltaTime * AnimationSpeed;
+            if (_animationBretheTick >= 1) _loweringAnimation = true;
         }
-        Vector3 NewTargetScale = new Vector3(Mathf.Lerp(_startingScaleOrSize.x, _startingScaleOrSize.x + AnimationSizeAdditionX, _animationTick), Mathf.Lerp(_startingScaleOrSize.y, _startingScaleOrSize.y + AnimationSizeAdditionY, _animationTick), transform.localScale.z);
+        else if (_loweringAnimation && _animationBretheTick > 0)
+        {
+            _animationBretheTick -= Time.deltaTime * AnimationSpeed;
+            if (_animationBretheTick <= 0) _loweringAnimation = false;
+        }
+        Vector3 NewTargetScale = new Vector3(Mathf.Lerp(_startingScaleOrSize.x, _startingScaleOrSize.x + AnimationSizeAdditionX, _animationBretheTick), Mathf.Lerp(_startingScaleOrSize.y, _startingScaleOrSize.y + AnimationSizeAdditionY, _animationBretheTick), transform.localScale.z);
         transform.localScale = NewTargetScale;
     }
 }

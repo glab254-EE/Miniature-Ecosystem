@@ -7,7 +7,6 @@ using UnityEngine;
 public class AnimalsSO : ScriptableObject
 {
     [field:Header("Animal visualization set-up.")]
-    [field:SerializeField] public BeingType BType {get; internal set;}= BeingType.Others; // aka not moving or moving
     [field:SerializeField] public Vector2 MinMovementBounds{get; internal set;}
     [field:SerializeField] public Vector2 MaxMovementBounds{get; internal set;}
     [field:SerializeField] public float MovementSpeed {get; internal set;} = 1; // aka not moving or moving
@@ -15,6 +14,7 @@ public class AnimalsSO : ScriptableObject
     [field:SerializeField] public float MovementDelay {get; internal set;}= 2;
     [field:SerializeField] public bool KeepVertical {get; internal set;} // reference animator for animations    
     [field:SerializeField] public Sprite BaseSprite {get; internal set;} = null; // aka not moving or moving
+    [field:SerializeField] public List<Sprite> AnimationSprites {get; internal set;} = null; // aka not moving or moving
     [field:Header("Animal Gaining Set-up")]
     [field:SerializeField] public float GainDelay{get; internal set;} = 1f;
     [field:SerializeField] public float GainAmmount{get; internal set;} = 1f;

@@ -12,14 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb888cd51f77cce45802ece90e80ba61, type: 3}
   m_Name: SingleCell2
   m_EditorClassIdentifier: 
-  <BType>k__BackingField: 1
   <MinMovementBounds>k__BackingField: {x: -6, y: -6}
   <MaxMovementBounds>k__BackingField: {x: 6, y: 6}
   <MovementSpeed>k__BackingField: 1
   <TurnDuration>k__BackingField: 0.5
   <MovementDelay>k__BackingField: 2
   <KeepVertical>k__BackingField: 0
-  <BaseSprite>k__BackingField: {fileID: 21300000, guid: ae7aed7fae80d504b8b814e61f50b3ab, type: 3}
+  <BaseSprite>k__BackingField: {fileID: 21300000, guid: acb46456844c4e842b7bfab3540bbd6a, type: 3}
+  <AnimationSprites>k__BackingField:
+  - {fileID: -7647713668033707352, guid: acb46456844c4e842b7bfab3540bbd6a, type: 3}
+  - {fileID: 8513970757504033757, guid: 34b45dcb08d19034baf0c27a77cbf1b9, type: 3}
+  - {fileID: -7367784643321321066, guid: 25e86bc7afa5cc94ca6ce3ae8546e3fb, type: 3}
+  - {fileID: 2955341093318856988, guid: 6c0631e06bb395649a62c968bffb63ce, type: 3}
+  - {fileID: 4729558700886055756, guid: 1d4c4e49f1e4f1f4daef820d5fc92448, type: 3}
+  - {fileID: -1300006053761806249, guid: ba80e1bf36df56b409b7734425325250, type: 3}
+  - {fileID: -3664888868232822299, guid: a255d018c898a01488178b09432afe29, type: 3}
+  - {fileID: 3245335911474574196, guid: 451780ba69794d54784284c871518f61, type: 3}
+  - {fileID: -3649652527103786201, guid: 66bafcc736bc8b24ea6bca65457f93cc, type: 3}
+  - {fileID: 8440482837210213065, guid: 24ccdee7f17af0c4291d0061da9cc23d, type: 3}
+  - {fileID: 2034831870591842444, guid: ad969eca3f0450c4484fb732bf52bc28, type: 3}
+  - {fileID: 1804820973056552638, guid: c552b2397d5cc4d4790fd6f7e510943b, type: 3}
+  - {fileID: 9087739735445319688, guid: df468a889af69e64d94ab19a157fc746, type: 3}
   <GainDelay>k__BackingField: 5
   <GainAmmount>k__BackingField: 2
   <ResourceID>k__BackingField: 1

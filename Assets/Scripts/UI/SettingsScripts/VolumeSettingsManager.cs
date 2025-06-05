@@ -10,6 +10,10 @@ public class VolumeSettingsManager : MonoBehaviour
     private Dictionary<string, float> volumes;
     internal void SetVolume(string name, float volume)
     {
+        if (Application.isEditor)
+        {
+            Debug.Log(name + " " + volume.ToString());
+        }
         if (volumes.ContainsKey(name))
         {
             volumes[name] = volume;
@@ -17,6 +21,8 @@ public class VolumeSettingsManager : MonoBehaviour
     }
     private void Start()
     {
+        if (instance != null) Destroy(gameObject);
+        instance = this;
         volumes = new();
         foreach (string name in volumeNames)
         {

@@ -16,8 +16,7 @@ public class CameraMoveAndZoomController : MonoBehaviour
     [SerializeField] private Vector2 LowerLimits;
     [SerializeField] private Vector2 UpperLimits;
     [SerializeField] private float MoveSpeed = 2;
-    [Tooltip("Representing tag where animals are 'connected' to.")]
-    internal bool Dragginganimal = false;
+    [SerializeField] private LayerMask ignoremask;
     private Vector3 resetPosition;
     private Vector3 difference;
     private Vector3 dragOrigin;
@@ -41,42 +40,43 @@ public class CameraMoveAndZoomController : MonoBehaviour
     private void OnScroll(InputAction.CallbackContext callbackContext)
     {
         Vector2 vector = callbackContext.ReadValue<Vector2>();
-        if (vector.y != 0 && !PointerIsUIHit()){
+        if (vector.y != 0 && !IsPointerOverUI()){
             ScrollDriection = vector.y;
         }
     }
     private void OnClick(InputAction.CallbackContext callbackContext){
         Vector2 position = Pointer.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(position);
-        if (draggingCamera == true || !PointerIsUIHit() && !Dragginganimal)
+        if (draggingCamera == true || !IsPointerOverUI())
         {
             draggingCamera = callbackContext.ReadValueAsButton();
             if (draggingCamera) dragOrigin = _Camera.ScreenToWorldPoint(Input.mousePosition);
         }
     }
-    private bool PointerIsUIHit()
+    public bool IsPointerOverUI()
     {
-        if (EventSystem.current.IsPointerOverGameObject(0)){
-            PointerEventData pointerEventData = new(EventSystem.current); 
-            pointerEventData.position = Input.mousePosition; 
-            GraphicRaycaster gr = FindFirstObjectByType<Canvas>().GetComponent<GraphicRaycaster>(); 
-            List<RaycastResult> results = new List<RaycastResult>(); 
-            gr.Raycast(pointerEventData, results); 
-            if (results.Count != 0 ) 
+        var mousePosition = Mouse.current.position.ReadValue();
+        PointerEventData pointerEventData = new(EventSystem.current);
+        pointerEventData.position = mousePosition;
+        List<RaycastResult> results = new();
+        EventSystem.current.RaycastAll(pointerEventData, results);
+        if (results.Count > 0)
+        {
+            foreach (RaycastResult result in results)
             {
-                foreach (RaycastResult raycastResult in results){
-                    if (raycastResult.gameObject.layer != 2){
-                        return true;
-                    }
+                int checkmask = 1 << result.gameObject.layer;
+                if (checkmask != ignoremask)
+                {
+                    return true;
                 }
-            } 
+            }
         }
         return false;
     }
     void OnDestroy(){
         _inAct.Player.OnZoom.performed -= OnScroll;
         _inAct.Player.Fire.performed -=OnClick;
-        //_inAct.Player.Fire.canceled -= OnClick;
+    //_inAct.Player.Fire.canceled -= OnClick;
         _inAct.Player.OnZoom.Disable();
         _inAct.Player.Fire.Disable();
     }
@@ -87,7 +87,7 @@ public class CameraMoveAndZoomController : MonoBehaviour
         ScrollDriection = 0;
         // end scroll, start moving
         difference = _Camera.ScreenToWorldPoint(Input.mousePosition)-_Camera.transform.position;
-        if (draggingCamera && !Dragginganimal){
+        if (draggingCamera){
             float moveX = dragOrigin.x - difference.x;
             float moveY = dragOrigin.y - difference.y;
             Vector3 targetvector = new Vector3(Mathf.Clamp(moveX,LowerLimits.x,UpperLimits.x),Mathf.Clamp(moveY,LowerLimits.x,UpperLimits.y),_Camera.transform.position.z);

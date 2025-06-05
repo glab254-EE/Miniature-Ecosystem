@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb888cd51f77cce45802ece90e80ba61, type: 3}
   m_Name: SingleCell1
   m_EditorClassIdentifier: 
-  <BType>k__BackingField: 1
   <MinMovementBounds>k__BackingField: {x: -6, y: -6}
   <MaxMovementBounds>k__BackingField: {x: 6, y: 6}
   <MovementSpeed>k__BackingField: 0.4
@@ -20,6 +19,45 @@ MonoBehaviour:
   <MovementDelay>k__BackingField: 4
   <KeepVertical>k__BackingField: 0
   <BaseSprite>k__BackingField: {fileID: 21300000, guid: 975b93ed48a6de44ebf0ebc8fe17706c, type: 3}
+  <AnimationSprites>k__BackingField:
+  - {fileID: 21300000, guid: 906684d46c72d674396f35f523f42824, type: 3}
+  - {fileID: 21300000, guid: 959dfba5a06eea949bedd335af350038, type: 3}
+  - {fileID: 21300000, guid: 428616924c9215d41a6b325aa56560d5, type: 3}
+  - {fileID: 21300000, guid: d084b2b6401ac4740a49b857225bb796, type: 3}
+  - {fileID: 21300000, guid: dbaf42fd1e4240d44805237ccfa903f4, type: 3}
+  - {fileID: 21300000, guid: 2e4e7c9b77c6d084ea5f2816038c4aea, type: 3}
+  - {fileID: 21300000, guid: 6726872bfe6f2ef4c88637c757df059b, type: 3}
+  - {fileID: 21300000, guid: 5df678ef4c01f484b8216bda332fb359, type: 3}
+  - {fileID: 21300000, guid: f796f32cb74a0d243a9e515c7b9376b5, type: 3}
+  - {fileID: 21300000, guid: 416d018be920d0e469f7f090d7bfdf49, type: 3}
+  - {fileID: 21300000, guid: 2c85d9ec510acad4f8f43d0767727ca1, type: 3}
+  - {fileID: 21300000, guid: fff17661ba81ab04f9c11ea956ecee15, type: 3}
+  - {fileID: 21300000, guid: 7660a4eb0f7b11249b829a1237dee1b8, type: 3}
+  - {fileID: 21300000, guid: 0224073dbacd6f14eb8bd1bb9c60bdef, type: 3}
+  - {fileID: 21300000, guid: 5cabe51c9d226a246ae5a577bfab3ae9, type: 3}
+  - {fileID: 21300000, guid: dda2b3f4f23a50243b4d704133b54ca8, type: 3}
+  - {fileID: 21300000, guid: 63a38c5e978ff294aa801ec63204986f, type: 3}
+  - {fileID: 21300000, guid: 37529bd99a67943489a6955d6ce315a2, type: 3}
+  - {fileID: 21300000, guid: 0e51752b6c5b92442a5aa6a62d1b6981, type: 3}
+  - {fileID: 21300000, guid: 9f8f8f7c1c7a7c64b96f9d6d2732186e, type: 3}
+  - {fileID: 21300000, guid: 243576cabbcae0244a1308b6239b8e46, type: 3}
+  - {fileID: 21300000, guid: 9471d99bd9eb23a4698f79425ffd1bf4, type: 3}
+  - {fileID: 21300000, guid: 6cf0427cae9c7214b9b6cbfe6dfb0b12, type: 3}
+  - {fileID: 21300000, guid: 2071820fa696b034e8fbe926157070d4, type: 3}
+  - {fileID: 21300000, guid: 1dcec3ffc3847b34082cc41fbaa34b99, type: 3}
+  - {fileID: 21300000, guid: 51b8112ad2c058d47923098ee9267596, type: 3}
+  - {fileID: 21300000, guid: 95167fce26246c94f8bbf36e59b6b581, type: 3}
+  - {fileID: 21300000, guid: 991eb21dffbe15e40b1729a324cc4836, type: 3}
+  - {fileID: 21300000, guid: 88e14f6aab55a0943b0039967d9e710e, type: 3}
+  - {fileID: 21300000, guid: 872200f0759b3f747bc39133b5a28151, type: 3}
+  - {fileID: 21300000, guid: faecc3d0a38e88e4589f36449c7a2905, type: 3}
+  - {fileID: 21300000, guid: a1508680fba0ce348990b678b3386a46, type: 3}
+  - {fileID: 21300000, guid: a20030f3e6f304a4aadeba879221b602, type: 3}
+  - {fileID: 21300000, guid: 175d46201c43a2f45a0ee469b35f03c2, type: 3}
+  - {fileID: 21300000, guid: 7f7693912dee94248982f530f5ae18bc, type: 3}
+  - {fileID: 21300000, guid: a0f09aea86523f4488c909d14491eaf5, type: 3}
+  - {fileID: 21300000, guid: 75484d2113bac174abc306966d1d0a8a, type: 3}
+  - {fileID: 21300000, guid: 7fc1fc548e2c36a4aa22e80d158cbc63, type: 3}
   <GainDelay>k__BackingField: 5
   <GainAmmount>k__BackingField: 1
   <ResourceID>k__BackingField: 0

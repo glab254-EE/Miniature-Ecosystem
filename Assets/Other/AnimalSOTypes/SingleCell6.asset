@@ -12,14 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb888cd51f77cce45802ece90e80ba61, type: 3}
   m_Name: SingleCell6
   m_EditorClassIdentifier: 
-  <BType>k__BackingField: 1
   <MinMovementBounds>k__BackingField: {x: -6, y: -6}
   <MaxMovementBounds>k__BackingField: {x: 6, y: 6}
   <MovementSpeed>k__BackingField: 1
   <TurnDuration>k__BackingField: 0.5
   <MovementDelay>k__BackingField: 2
-  <KeepVertical>k__BackingField: 0
-  <BaseSprite>k__BackingField: {fileID: 21300000, guid: 6fd5f0f6d5db9a74eb0b23fc33dde4d2, type: 3}
+  <KeepVertical>k__BackingField: 1
+  <BaseSprite>k__BackingField: {fileID: 21300000, guid: 32dfa68a4ac3cf94a824d360fef8c97a, type: 3}
+  <AnimationSprites>k__BackingField:
+  - {fileID: 21300000, guid: 32dfa68a4ac3cf94a824d360fef8c97a, type: 3}
+  - {fileID: 21300000, guid: 9add15b03e26ac94397ce548feccf46a, type: 3}
+  - {fileID: 21300000, guid: 245d46b24d4e52c43bdbab1ea70e8314, type: 3}
+  - {fileID: 21300000, guid: ffcf756d57b464e48ae0b59c460ba5fa, type: 3}
+  - {fileID: 21300000, guid: e813f7071afdfc941ba12f777884a65b, type: 3}
+  - {fileID: 21300000, guid: 42ddf3c91945cad43941e94c43338ea5, type: 3}
+  - {fileID: 21300000, guid: 74212f0e017bca644a31737931fb98ce, type: 3}
   <GainDelay>k__BackingField: 5
   <GainAmmount>k__BackingField: 200
   <ResourceID>k__BackingField: 2

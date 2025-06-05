@@ -638,7 +638,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 152352320}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 152352318}
+        m_TargetAssemblyTypeName: ResourceClick, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &152352320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1919,6 +1931,9 @@ MonoBehaviour:
   LowerLimits: {x: -5, y: -4}
   UpperLimits: {x: 4, y: 5}
   MoveSpeed: 85
+  ignoremask:
+    serializedVersion: 2
+    m_Bits: 4
 --- !u!1 &533999778
 GameObject:
   m_ObjectHideFlags: 0
@@ -2244,7 +2259,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 916737171}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.6666666
+  m_Size: 0.6666667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3120,8 +3135,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1869535022}
   m_HandleRect: {fileID: 1869535021}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.99957675
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3535,6 +3550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 930264741}
   - component: {fileID: 930264742}
+  - component: {fileID: 930264743}
   m_Layer: 5
   m_Name: MasterVolume
   m_TagString: Untagged
@@ -3608,25 +3624,26 @@ MonoBehaviour:
   m_FillRect: {fileID: 443609664}
   m_HandleRect: {fileID: 1847520853}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 10
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 751561718}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &930264743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930264740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17e82fb78e02f3f4e9b3b623e1b6c551, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetSettingsSlider: MASTER-VOL
 --- !u!1 &933390711
 GameObject:
   m_ObjectHideFlags: 0
@@ -6009,8 +6026,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1649465499}
   - component: {fileID: 1649465500}
+  - component: {fileID: 1649465501}
   m_Layer: 5
-  m_Name: MasterVolume (1)
+  m_Name: SFXVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6082,25 +6100,26 @@ MonoBehaviour:
   m_FillRect: {fileID: 604309741}
   m_HandleRect: {fileID: 402654389}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: -80
+  m_MaxValue: 10
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 751561718}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &1649465501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649465498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17e82fb78e02f3f4e9b3b623e1b6c551, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetSettingsSlider: SFX-VOL
 --- !u!1 &1670934620
 GameObject:
   m_ObjectHideFlags: 0
@@ -6542,7 +6561,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00021550462}
+  m_AnchoredPosition: {x: 0, y: -0.000013640488}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1801228757

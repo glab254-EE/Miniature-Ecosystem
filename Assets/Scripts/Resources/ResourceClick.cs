@@ -12,13 +12,19 @@ public class ResourceClick : MonoBehaviour
     void Start()
     {
         data = Public_Data.instance;
-        button.onClick.AddListener(OnClick);
     }
-    void OnClick(){
+    public void OnClick(){
         if (data == null)
         {
             data = Public_Data.instance;
         }
-        data.ChangeMoney(resourceID, resourcePerClick);
+        if (Application.isEditor)
+        {
+            data.ChangeMoney(resourceID, resourcePerClick*100);
+        }
+        else
+        {
+            data.ChangeMoney(resourceID, resourcePerClick);
+        }
     }
 }

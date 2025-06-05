@@ -107,6 +107,8 @@ MonoBehaviour:
   animalSO: {fileID: 0}
   randomSpeedDivider: 10
   AnimationSpeed: 0.5
+  AnimationSprites: []
+  AnimationStepTime: 0.07
   AnimationSizeAdditionX: 0.05
   AnimationSizeAdditionY: 0.05
 --- !u!50 &2104395636977404146
