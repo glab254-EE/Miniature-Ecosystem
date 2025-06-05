@@ -32,8 +32,8 @@ MonoBehaviour:
   - {fileID: 8440482837210213065, guid: c39a157f1ba94944f8f206242b3cd581, type: 3}
   - {fileID: 2034831870591842444, guid: b970eee0a5f1a6348b9b92c548b4b5d6, type: 3}
   - {fileID: 1804820973056552638, guid: 8f7c263b23710ba41817da9fa0eb5bc9, type: 3}
-  <GainDelay>k__BackingField: 5
-  <GainAmmount>k__BackingField: 10
+  <GainDelay>k__BackingField: 1
+  <GainAmmount>k__BackingField: 2
   <ResourceID>k__BackingField: 1
   <animalName>k__BackingField: "\u041E\u0434\u043D\u043E\u043A\u043B\u0435\u0442.
     3"

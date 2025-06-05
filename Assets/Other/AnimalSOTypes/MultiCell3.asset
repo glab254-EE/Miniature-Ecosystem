@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb888cd51f77cce45802ece90e80ba61, type: 3}
+  m_Name: MultiCell3
+  m_EditorClassIdentifier: 
+  <MinMovementBounds>k__BackingField: {x: -6, y: -6}
+  <MaxMovementBounds>k__BackingField: {x: 6, y: 6}
+  <MovementSpeed>k__BackingField: 1
+  <TurnDuration>k__BackingField: 0.5
+  <MovementDelay>k__BackingField: 2
+  <KeepVertical>k__BackingField: 1
+  <BaseSprite>k__BackingField: {fileID: -3757087281049508313, guid: a135ebae6de2c0541965102af5f452fd, type: 3}
+  <AnimationSprites>k__BackingField:
+  - {fileID: -3757087281049508313, guid: a135ebae6de2c0541965102af5f452fd, type: 3}
+  - {fileID: -6082342344438106568, guid: 1a57386de93a35e42ae11f1f27c4014e, type: 3}
+  - {fileID: -3360800293892752098, guid: 2d7e876eddce9ea47bc805ef76ba8091, type: 3}
+  - {fileID: -7153709221200226468, guid: ee24453f627464447880290bc19b905d, type: 3}
+  - {fileID: 5630903790890725809, guid: 2daa8dc818a0b24429603700b8be325b, type: 3}
+  - {fileID: -4637142246663535239, guid: eb86f796eb69160449d816e57be90760, type: 3}
+  - {fileID: 1961634729597017375, guid: 31e38fbdd272ea34ebc399ab88cf7398, type: 3}
+  - {fileID: -6513757385444310355, guid: 1f305de5d776c0a4d910ca1b9605c4a7, type: 3}
+  - {fileID: -4305773915323537917, guid: 9663b01dd254d554e826537be338563d, type: 3}
+  - {fileID: -5593359378461533474, guid: a55d0897ad34cd44e85024ef1182364c, type: 3}
+  - {fileID: 666057213962802557, guid: 62f471f0b2f156048954ddc42e17a473, type: 3}
+  - {fileID: -8860263478646966044, guid: a09ee5232ce6bc04e831fab75e581a4a, type: 3}
+  - {fileID: -392865987742644338, guid: f210f6b489012584fb4f5aa7dd829932, type: 3}
+  <GainDelay>k__BackingField: 1
+  <GainAmmount>k__BackingField: 12
+  <ResourceID>k__BackingField: 3
+  <animalName>k__BackingField: "\u041C\u043D\u043E\u0433\u043E\u043A\u043B\u0435\u0442.
+    3"
+  <AnimalResourceCost>k__BackingField: 360
+  <AnimalResourceSubstractID>k__BackingField: 3
+  <MinAnimalSize>k__BackingField: 0.8
+  <MaxAnimalSize>k__BackingField: 1.1
+  AnimalID: advcell3

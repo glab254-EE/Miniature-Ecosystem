@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb888cd51f77cce45802ece90e80ba61, type: 3}
+  m_Name: MultiCell4
+  m_EditorClassIdentifier: 
+  <MinMovementBounds>k__BackingField: {x: -6, y: -6}
+  <MaxMovementBounds>k__BackingField: {x: 6, y: 6}
+  <MovementSpeed>k__BackingField: 1
+  <TurnDuration>k__BackingField: 0.5
+  <MovementDelay>k__BackingField: 2
+  <KeepVertical>k__BackingField: 1
+  <BaseSprite>k__BackingField: {fileID: -7647713668033707352, guid: 064c4679e776a9647aa1d596ae7f77a0, type: 3}
+  <AnimationSprites>k__BackingField:
+  - {fileID: -7647713668033707352, guid: 064c4679e776a9647aa1d596ae7f77a0, type: 3}
+  - {fileID: 8513970757504033757, guid: 94f86405aba5521418168880dd98496b, type: 3}
+  - {fileID: -7367784643321321066, guid: b5bc3ef987ba5624594c22d264dec3d0, type: 3}
+  - {fileID: 2955341093318856988, guid: dc8ea83247afe6c42b51cd823cacdbe8, type: 3}
+  - {fileID: 4729558700886055756, guid: 1baa967b3dcaf6d4ea2f2b23f73da61f, type: 3}
+  - {fileID: -1300006053761806249, guid: 5ff0280d8044dcf4ba98c9fd156b14b5, type: 3}
+  - {fileID: -3664888868232822299, guid: 91fabc2c41e7ebf4b9b86b08f30b1ed7, type: 3}
+  - {fileID: 3245335911474574196, guid: ba381e3ac6076c249bcc931de12f3f97, type: 3}
+  - {fileID: -3649652527103786201, guid: f68295bed8521a1448fcd2797e6e6108, type: 3}
+  - {fileID: 8440482837210213065, guid: b2e76d348c172834993e5e264ec3798b, type: 3}
+  - {fileID: 2034831870591842444, guid: 98364c6ccab28e248ba20bded92a549c, type: 3}
+  - {fileID: 1804820973056552638, guid: 05296c9d0e595c642a058f44dfe92524, type: 3}
+  - {fileID: 9087739735445319688, guid: 34eef72d1934a8a4abc64c17f6ed4f80, type: 3}
+  - {fileID: -4004426593830629133, guid: e6f4fd9257c96814d87cfbc050574aa8, type: 3}
+  - {fileID: 528337442560486586, guid: 857494e4fd2aee34998ab2caaadd23d4, type: 3}
+  - {fileID: -2293770399192728391, guid: a116d5602c294ae4bb9d83f61336bc12, type: 3}
+  - {fileID: 1440054451988671710, guid: 58388b9e9955b254e97f265cf6367e30, type: 3}
+  - {fileID: -5569973206585807737, guid: a153ae4e4590cb644ae8c9eb5ae37f36, type: 3}
+  - {fileID: -681700960346968639, guid: 5e8e9290cca04f342aae4d7744647b19, type: 3}
+  - {fileID: 8074513804737590949, guid: 33f204abc53063d4a8d9b0dbcd2f9837, type: 3}
+  - {fileID: 3588625480818577883, guid: e1046ac3ba65e224abaabe4f6ff6bf6d, type: 3}
+  - {fileID: 5544172561115172877, guid: 89fedff736cb51b4da4ec8b0bfa245ad, type: 3}
+  - {fileID: -4502986180083198802, guid: 732d4638f2c5cae41bd9eefbbcde6d4e, type: 3}
+  - {fileID: 1259185853632110232, guid: bf05c5e6d57f5a343a276369a4a60b9e, type: 3}
+  - {fileID: -2526722284965648373, guid: 61bc411619af9d94c8f8a16130934071, type: 3}
+  - {fileID: 2055203848095463909, guid: 3d6681ccbd18c3c4ba3458c23de93cca, type: 3}
+  - {fileID: 420111995725113175, guid: c913172f697ffc2448762adc2130921f, type: 3}
+  - {fileID: -1798030303972629592, guid: 41ec6bc1ccfd53c4ca6a4e56ba348d13, type: 3}
+  - {fileID: 8512187526947512394, guid: ef408d0c7e437fb47ba8336712a1360d, type: 3}
+  - {fileID: -1002923245874891418, guid: ac47740d1ee518f498a060fe889028bf, type: 3}
+  - {fileID: -5215531700232613639, guid: fc2f6c6400f4a47489132a6a5ca1c339, type: 3}
+  - {fileID: 6023478525347083594, guid: 6bea6ada0f658ee42874aff907357a52, type: 3}
+  - {fileID: 8636459650413822930, guid: edf7fb9e212168e439d7a734b6acd886, type: 3}
+  - {fileID: -2286534187837484483, guid: e86a0c50fdf87994ca8c4a5719a7a42d, type: 3}
+  - {fileID: -1366879341458313311, guid: db50104624e21ea409e5986045b82ee5, type: 3}
+  - {fileID: -2164930059381696466, guid: e95c6850d434c4a4f9bb786a52678824, type: 3}
+  - {fileID: -468952470130965263, guid: 7721f382ee0d93044a3460610b0dcfc7, type: 3}
+  - {fileID: 5536490254922107597, guid: ffe496a4fef436e4b9c45d4dbb68a77a, type: 3}
+  - {fileID: -7499547723578212128, guid: a8510758ef9a29c44ab91240b223bb7d, type: 3}
+  - {fileID: 3671261489913939521, guid: 50b4b947d7b9f9a45be50312f24beaff, type: 3}
+  - {fileID: -8904457831037594621, guid: f67fcb4465800014f8662f7eef5185ec, type: 3}
+  <GainDelay>k__BackingField: 1
+  <GainAmmount>k__BackingField: 63
+  <ResourceID>k__BackingField: 3
+  <animalName>k__BackingField: "\u041C\u043D\u043E\u0433\u043E\u043A\u043B\u0435\u0442.
+    4"
+  <AnimalResourceCost>k__BackingField: 6300
+  <AnimalResourceSubstractID>k__BackingField: 3
+  <MinAnimalSize>k__BackingField: 0.8
+  <MaxAnimalSize>k__BackingField: 1.1
+  AnimalID: advcell4

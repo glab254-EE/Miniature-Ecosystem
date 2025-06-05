@@ -27,7 +27,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e813f7071afdfc941ba12f777884a65b, type: 3}
   - {fileID: 21300000, guid: 42ddf3c91945cad43941e94c43338ea5, type: 3}
   - {fileID: 21300000, guid: 74212f0e017bca644a31737931fb98ce, type: 3}
-  <GainDelay>k__BackingField: 5
+  <GainDelay>k__BackingField: 1
   <GainAmmount>k__BackingField: 200
   <ResourceID>k__BackingField: 2
   <animalName>k__BackingField: "\u041E\u0434\u043D\u043E\u043A\u043B\u0435\u0442.

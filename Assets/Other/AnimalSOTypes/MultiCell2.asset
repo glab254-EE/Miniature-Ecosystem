@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb888cd51f77cce45802ece90e80ba61, type: 3}
+  m_Name: MultiCell2
+  m_EditorClassIdentifier: 
+  <MinMovementBounds>k__BackingField: {x: -6, y: -6}
+  <MaxMovementBounds>k__BackingField: {x: 6, y: 6}
+  <MovementSpeed>k__BackingField: 1
+  <TurnDuration>k__BackingField: 0.5
+  <MovementDelay>k__BackingField: 2
+  <KeepVertical>k__BackingField: 1
+  <BaseSprite>k__BackingField: {fileID: 21300000, guid: 87f9ac990a837da4fbd47b219f5f10b3, type: 3}
+  <AnimationSprites>k__BackingField:
+  - {fileID: 21300000, guid: 87f9ac990a837da4fbd47b219f5f10b3, type: 3}
+  - {fileID: 21300000, guid: 539c7172a1d1b2e4187438e5de0db424, type: 3}
+  - {fileID: 21300000, guid: ba7f6bfbce66b334381f956270ce856e, type: 3}
+  - {fileID: 21300000, guid: 2d63fc8dac74cc44dbe147a02df4e49a, type: 3}
+  - {fileID: 21300000, guid: 4f8e70254ecf3dd4f9670a0442ffba36, type: 3}
+  - {fileID: 21300000, guid: 50962dfcaedfcad4f8562fba8f99527d, type: 3}
+  - {fileID: 21300000, guid: 7380ce3974517e54dbf3383e168613cd, type: 3}
+  <GainDelay>k__BackingField: 1
+  <GainAmmount>k__BackingField: 3
+  <ResourceID>k__BackingField: 3
+  <animalName>k__BackingField: "\u041C\u043D\u043E\u0433\u043E\u043A\u043B\u0435\u0442.
+    2"
+  <AnimalResourceCost>k__BackingField: 32
+  <AnimalResourceSubstractID>k__BackingField: 3
+  <MinAnimalSize>k__BackingField: 0.8
+  <MaxAnimalSize>k__BackingField: 1.1
+  AnimalID: advcell2
